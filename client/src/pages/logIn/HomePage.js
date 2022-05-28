@@ -73,8 +73,7 @@ const HomePage = () => {
     };
 
     const registerFormSubmit = async (e) => {
-        e.preventDefault();
-        if (reenterPassword === registerFormData.password) {
+        if (reenterPassword && reenterPassword === registerFormData.password) {
             await dispatch(signup(registerFormData, setIsSuccess));
         } else {
             alert("Please confirm password");
@@ -216,6 +215,7 @@ const HomePage = () => {
                                     pattern="[0-9]{10}"
                                     value={registerFormData.phoneNumber}
                                     onChange={registerFormHandleChange}
+                                    required
                                 />
                             </Col>
                             <Col>
@@ -224,6 +224,7 @@ const HomePage = () => {
                                     aria-label="Default select example"
                                     onChange={registerFormHandleChange}
                                     name="country"
+                                    required
                                 >
                                     <option>Select your country</option>
                                     <option value="Việt Nam">Việt Nam</option>
@@ -240,6 +241,7 @@ const HomePage = () => {
                                     name="userName"
                                     value={registerFormData.userName}
                                     onChange={registerFormHandleChange}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -252,6 +254,7 @@ const HomePage = () => {
                                     name="password"
                                     value={registerFormData.password}
                                     onChange={registerFormHandleChange}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -266,6 +269,7 @@ const HomePage = () => {
                                     onChange={(e) =>
                                         setReenterPassword(e.target.value)
                                     }
+                                    required
                                 />
                             </Col>
                         </Row>

@@ -43,7 +43,8 @@ export const signup = (userData, setIsSuccess) => async (dispatch) => {
         localStorage.setItem("authToken", data.token)
         dispatch({ type: SIGN_UP, payload: data });
     } catch (error) {
-        alert(error.response.data)
+        console.log(error.response.data.message);
+        alert(error.response.data.message.message)
     }
 };
 
