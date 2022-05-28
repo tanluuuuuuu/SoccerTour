@@ -153,7 +153,7 @@ const HomePage = () => {
                             </Col>
                         </Row>
                         <Row className="my-4 text-center">
-                            <Link onClick={() => {}}>Quên mật khẩu</Link>
+                            <Col>Quên mật khẩu</Col>
                         </Row>
                         <Row className="my-4">
                             <p className="my-1">
