@@ -46,8 +46,7 @@ export const fetchTour = () => async (dispatch) => {
 
 export const updateCalendar = (calendar) => async (dispatch) => {
     try {
-        const token = localStorage.getItem("authToken");
-        const { data } = await api.updateCalendar({calendar, token});
+        const { data } = await api.updateCalendar(calendar);
 
         dispatch({ type: CLR_ER_MESSAGE, payload: null });
         dispatch({ type: UPDATE_CALENDAR, payload: data });
@@ -88,8 +87,7 @@ export const changeTourRule = (tourData) => async (dispatch) => {
 
 export const acceptRegister = (teamId) => async (dispatch) => {
     try {
-        const token = localStorage.getItem("authToken")
-        const { data } = await api.acceptRegister({teamId, token});
+        const { data } = await api.acceptRegister(teamId);
 
         console.log(data)
         dispatch({ type: ACCEPT_REGISTER, payload: data });

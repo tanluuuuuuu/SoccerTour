@@ -65,8 +65,7 @@ function CreateTeam() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('authToken')
-        await dispatch(createTeam({...teamData, token}));
+        await dispatch(createTeam(teamData));
     };
 
     const clear = () => {

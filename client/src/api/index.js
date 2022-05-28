@@ -6,6 +6,7 @@ const userUrl = "http://localhost:5000/user";
 const config = {
     header: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 };
 
@@ -14,7 +15,9 @@ export const fetchPlayers = (playerAddresses) =>
 
 export const fetchTeams = () => axios.get(url);
 
-export const createTeam = (newTeam) => axios.post(url, newTeam);
+export const fetchOneTeam = (teamId) => axios.get(url);
+
+export const createTeam = (newTeam) => axios.post(url, newTeam, config);
 
 export const acceptRegister = (data) => axios.post(`${url}/acceptregister`, data);
 
@@ -26,13 +29,12 @@ export const updateCalendar = (calendar) =>
     axios.patch(`${url}/calendar`, calendar);
 
 export const updateMatch = (id, updateData) =>
-    axios.put(`${url}/calendar/${id}`, updateData);
+    axios.put(`${url}/calendar/${id}`, updateData, config);
 
 export const updateMatchResult = (id, updateData) =>
-    axios.put(`${url}/calendar/result/${id}`, updateData);
+    axios.put(`${url}/calendar/result/${id}`, updateData, config);
 
-export const getUserList = (token) =>
-    axios.post(`${userUrl}/getUserList`, token, config);
+export const getUserList = () => axios.post(`${userUrl}/getUserList`, config);
 
 export const CheckSignin = (token) =>
     axios.post(`${userUrl}/checksignin`, token, config);
@@ -48,4 +50,4 @@ export const getRanking = () => axios.get(`${url}/ranking`);
 export const getRankingPlayer = () => axios.get(`${url}/rankingPlayer`);
 
 export const changeTourRule = (tourData) =>
-    axios.patch(`${url}/rule`, tourData);
+    axios.patch(`${url}/rule`, tourData, config);

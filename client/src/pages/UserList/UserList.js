@@ -8,13 +8,12 @@ const UserList = () => {
     const userList = useSelector((state) => state.userList);
     useEffect(() => {
         if (userList.length === 0) {
-            const token = localStorage.getItem("authToken");
-            dispatch(getUserList({ token }));
+            dispatch(getUserList());
         }
     });
 
-    const onSeeTeam = () => {
-
+    const onSeeTeam = (team) => {
+        console.log(team);
     };
 
     return (
@@ -32,7 +31,7 @@ const UserList = () => {
                             additional content.
                         </Card.Text>
                         {user.team ? (
-                            <Button variant="primary" onClick={onSeeTeam}>
+                            <Button variant="primary" onClick={() => onSeeTeam(user.team)}>
                                 Xem đội
                             </Button>
                         ) : (

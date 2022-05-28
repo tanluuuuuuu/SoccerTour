@@ -2,8 +2,7 @@ import * as api from "../api/index.js";
 import { UPDATE_MATCH, UPDATE_MATCH_RESULT, SET_ER_MESSAGE, CLR_ER_MESSAGE } from "../constants/actionTypes.js";
 export const updateMatch = (id, match) => async (dispatch) => {
     try {
-        const token = localStorage.getItem("authToken");
-        const { data } = await api.updateMatch(id, {match, token});
+        const { data } = await api.updateMatch(id, match);
 
         dispatch({ type: CLR_ER_MESSAGE, payload: null });
         dispatch({ type: UPDATE_MATCH, payload: data });
@@ -14,8 +13,7 @@ export const updateMatch = (id, match) => async (dispatch) => {
 
 export const updateMatchResult = (id, resultData) => async (dispatch) => {
     try {
-        const token = localStorage.getItem("authToken");
-        const { data } = await api.updateMatchResult(id, {resultData, token});
+        const { data } = await api.updateMatchResult(id, resultData);
 
         dispatch({ type: CLR_ER_MESSAGE, payload: null });
         dispatch({ type: UPDATE_MATCH_RESULT, payload: data });

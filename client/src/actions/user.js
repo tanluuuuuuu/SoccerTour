@@ -1,9 +1,9 @@
 import * as api from "../api/index.js";
 import { SIGN_IN, SIGN_UP, GET_USER_LIST, CHECK_SIGN_IN, LOG_OUT } from "../constants/actionTypes.js";
 
-export const getUserList = (token) => async (dispatch) => {
+export const getUserList = () => async (dispatch) => {
     try {
-        const {data} = await api.getUserList(token);
+        const {data} = await api.getUserList();
 
         dispatch({type: GET_USER_LIST, payload: data});
     } catch (error) {

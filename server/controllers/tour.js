@@ -285,7 +285,7 @@ export const getTour = async (req, res) => {
 // Create all matches
 export const updateTour = async (req, res) => {
     const tour = await TourModel.findOne();
-    const { calendar: data } = req.body;
+    const data = req.body;
 
     if (data.allTeams.length <= tour.minTeam) {
         return res.status(500).send("Không đủ số lượng đội yêu cầu của giải");
@@ -574,7 +574,7 @@ export const updateMatchResult = async (req, res) => {
     try {
         const { id: _id } = req.params;
 
-        const { resultData: matchResult } = _.cloneDeep(req.body);
+        const matchResult = _.cloneDeep(req.body);
 
         if (!mongoose.Types.ObjectId.isValid(_id))
             return res.status(403).send("No match with that id");
@@ -830,7 +830,7 @@ export const changeTourRule = async (req, res) => {
 
 export const acceptRegister = async (req, res, next) => {
     try {
-        const { teamId } = req.body;
+        const teamId = req.body;
         const tour = await TourModel.findOne();
         const team = await teamModel.findById(teamId).populate({
             path: "playerList",
