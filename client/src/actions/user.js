@@ -27,9 +27,8 @@ export const signin = (loginData) => async (dispatch) => {
         loginData.username = loginData.userName
         
         const {data} = await api.signin(loginData);
-        console.log("Logined");
-
         localStorage.setItem("authToken", data.token)
+        console.log("Logined");
 
         dispatch({type: SIGN_IN, payload: data});
     } catch (error) {
@@ -50,4 +49,5 @@ export const signup = (userData, setIsSuccess) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
     dispatch({ type: LOG_OUT, payload: null })
+    window.location.reload(false);
 };
