@@ -1,0 +1,99 @@
+import * as api from "../api/index.js";
+import {
+    FETCH_ALL_TOUR,
+    UPDATE_CALENDAR,
+    CREATE_TOUR,
+    CREATE_TEAM,
+    FETCH_RANKING_TEAM,
+    FETCH_RANKING_PLAYER,
+    SET_ER_MESSAGE,
+    CLR_ER_MESSAGE,
+    CHANGE_TOUR_RULE,
+    ACCEPT_REGISTER
+} from "../constants/actionTypes.js";
+
+export const createTeam = (team) => async (dispatch) => {
+    try {
+        const { data } = await api.createTeam(team);
+
+        console.log(`send dispatch ${CLR_ER_MESSAGE}`);
+        dispatch({ type: CLR_ER_MESSAGE, payload: null });
+        dispatch({ type: CREATE_TEAM, payload: data });
+    } catch (error) {
+        dispatch({ type: SET_ER_MESSAGE, payload: error.response.data });
+    }
+};
+
+export const createTour = (tourData) => async (dispatch) => {
+    try {
+        const { data } = await api.createTour(tourData);
+
+        dispatch({ type: CREATE_TOUR, payload: data });
+    } catch (error) {
+        console.log(error.response.data.message);
+    }
+};
+
+export const fetchTour = () => async (dispatch) => {
+    try {
+        const { data } = await api.fetchTour();
+
+        dispatch({ type: FETCH_ALL_TOUR, payload: data });
+    } catch (error) {
+        console.log(error.response.data.message);
+    }
+};
+
+export const updateCalendar = (calendar) => async (dispatch) => {
+    try {
+        const token = localStorage.getItem("authToken");
+        const { data } = await api.updateCalendar({calendar, token});
+
+        dispatch({ type: CLR_ER_MESSAGE, payload: null });
+        dispatch({ type: UPDATE_CALENDAR, payload: data });
+    } catch (error) {
+        dispatch({ type: SET_ER_MESSAGE, payload: error.response.data });
+    }
+};
+
+export const getRanking = () => async (dispatch) => {
+    try {
+        const { data } = await api.getRanking();
+
+        dispatch({ type: FETCH_RANKING_TEAM, payload: data });
+    } catch (error) {
+        console.log(error.response.data.message);
+    }
+};
+
+export const getRankingPlayer = () => async (dispatch) => {
+    try {
+        const { data } = await api.getRankingPlayer();
+
+        dispatch({ type: FETCH_RANKING_PLAYER, payload: data });
+    } catch (error) {
+        console.log(error.response.data.message);
+    }
+};
+
+export const changeTourRule = (tourData) => async (dispatch) => {
+    try {
+        const { data } = await api.changeTourRule(tourData);
+
+        dispatch({ type: CHANGE_TOUR_RULE, payload: data });
+    } catch (error) {
+        console.log(error.response.data);
+    }
+};
+
+export const acceptRegister = (teamId) => async (dispatch) => {
+    try {
+        const token = localStorage.getItem("authToken")
+        const { data } = await api.acceptRegister({teamId, token});
+
+        console.log(data)
+        dispatch({ type: ACCEPT_REGISTER, payload: data });
+    } catch (error) {
+        console.log(error.response.data);
+    }
+}

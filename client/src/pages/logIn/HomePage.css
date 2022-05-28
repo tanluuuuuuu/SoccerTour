@@ -1,0 +1,21 @@
+.home-page {
+    color: #fff;
+}
+
+.home-page::before {
+    content: "";
+    width: 100vw;
+    height: 100vh;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-image: url("./stadium-2.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: brightness(50%);
+    z-index: 0;
+}
+

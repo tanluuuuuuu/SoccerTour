@@ -1,0 +1,165 @@
+import React, { useState } from "react";
+import { Container, Button, Form, Row, Col, Spinner } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { changeTourRule } from "../../actions/tour";
+
+function TourRule() {
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const [Show, setShow] = useState(false);
+    const tour = useSelector((state) => state.tour);
+
+    const initializeTourData = {
+        tourName: tour.tourName,
+        maxTeam: tour.maxTeam,
+        minTeam: tour.minTeam,
+        maxPlayerOfTeam: tour.maxPlayerOfTeam,
+        minPlayerOfTeam: tour.minPlayerOfTeam,
+        maxForeignPlayer: tour.maxForeignPlayer,
+        maxAge: tour.maxAge,
+        minAge: tour.minAge,
+        registerList: [],
+    };
+    const [tourData, setTourData] = useState(initializeTourData);
+
+    const handleChange = (e) => {
+        setTourData({ ...tourData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        console.log(loading);
+        await dispatch(changeTourRule(tourData));
+        setLoading(false);
+    };
+
+    const onReset = () => {
+        setTourData(initializeTourData);
+    };
+
+    return (
+        <Container className="mt-5">
+            <h3 className="bg-danger text-center text-white">
+                Quy định giải đấu
+            </h3>
+            <Form onSubmit={handleSubmit}>
+                <Form.Label>Tên giải đấu</Form.Label>
+                <Form.Control
+                    type="text"
+                    value={tourData.tourName}
+                    name="tourName"
+                    onChange={handleChange}
+                    required
+                />
+                <Row>
+                    <Col>
+                        <Form.Label>Số đội tối thiểu</Form.Label>
+                        <Form.Control
+                            type="Number"
+                            min={0}
+                            value={tourData.minTeam}
+                            name="minTeam"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                    <Col>
+                        <Form.Label>Số đội tối đa</Form.Label>
+                        <Form.Control
+                            type="text"
+                            min={0}
+                            value={tourData.maxTeam}
+                            name="maxTeam"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
+                        <Form.Label>Số cầu thủ tối thiểu</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.minPlayerOfTeam}
+                            name="minPlayerOfTeam"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                    <Col>
+                        <Form.Label>Số cầu thủ tối đa</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.maxPlayerOfTeam}
+                            name="maxPlayerOfTeam"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
+
+                <Form.Label>Số cầu thủ nước ngoài tối đa</Form.Label>
+                <Form.Control
+                    type="number"
+                    min={0}
+                    value={tourData.maxForeignPlayer}
+                    name="maxForeignPlayer"
+                    onChange={handleChange}
+                    required
+                />
+
+                <Row>
+                    <Col>
+                        <Form.Label>Độ tuổi tối thiểu</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.minAge}
+                            name="minAge"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                    <Col>
+                        <Form.Label>Độ tuổi tối đa</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.maxAge}
+                            name="maxAge"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
+
+                <Button
+                    variant="secondary"
+                    type="button"
+                    className="float-right mt-2 mx-2"
+                    onClick={onReset}
+                >
+                    Reset
+                </Button>
+                <Button type="submit" className="float-right mt-2">
+                    {loading ? (
+                        <Spinner
+                            animation="border"
+                            variant="secondary"
+                            size="sm"
+                        ></Spinner>
+                    ) : (
+                        <></>
+                    )}
+                    Save
+                </Button>
+            </Form>
+        </Container>
+    );
+}
+
+export default TourRule;
