@@ -226,9 +226,8 @@ const HomePage = () => {
                                     name="country"
                                 >
                                     <option>Select your country</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value="Việt Nam">Việt Nam</option>
+                                    <option value="Other">Other</option>
                                 </Form.Select>
                             </Col>
                         </Row>
