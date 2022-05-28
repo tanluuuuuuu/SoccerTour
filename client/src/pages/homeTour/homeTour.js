@@ -406,7 +406,7 @@ function HomeTour({ isLoading }) {
                             </Col>
                         </Row>
                         <Row className="my-4 text-center">
-                            <Link onClick={() => {}}>Quên mật khẩu</Link>
+                            Quên mật khẩu
                         </Row>
                         <Row className="my-4">
                             <p className="my-1">
