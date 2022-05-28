@@ -253,7 +253,7 @@ function HomeTour({ isLoading }) {
                     </Col>
                 </Row>
                 {tour.ranking.map((team) => (
-                    <Card className="mt-2">
+                    <Card className="mt-2" key={team.teamName}>
                         <Card.Body className="text-center">
                             <Row>
                                 <Col>{team.teamName}</Col>
@@ -298,7 +298,7 @@ function HomeTour({ isLoading }) {
                     </Col>
                 </Row>
                 {tour.rankingPlayer.map((player) => (
-                    <Card className="mt-2">
+                    <Card className="mt-2" key={player.playerName}>
                         <Card.Body className="text-center">
                             <Row>
                                 <Col>{player.playerName}</Col>
