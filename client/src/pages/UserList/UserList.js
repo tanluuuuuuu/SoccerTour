@@ -69,16 +69,16 @@ const UserList = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
-                        <Col>{`Tên đội: ${team.teamName}`}</Col>
-                        <Col>{`Sân nhà: ${team.homeGround}`}</Col>
+                        <Col>{`Tên đội: ${team?.teamName}`}</Col>
+                        <Col>{`Sân nhà: ${team?.homeGround}`}</Col>
                     </Row>
-                    {team.playerList.map((player) => (
-                        <Row key={player.playerName}>
-                            <Col>{`Tên cầu thủ: ${player.playerName}`}</Col>
-                            <Col>{`Quốc tịch: ${player.nationality}`}</Col>
-                            <Col>{`Vị trí: ${player.playerType}`}</Col>
-                            <Col>{`Số bàn thắng: ${player.allGoals.length}`}</Col>
-                            <Col>{`Số kiến tạo: ${player.allAssists.length}`}</Col>
+                    {team?.playerList.map((player) => (
+                        <Row key={player?.playerName}>
+                            <Col>{`Tên cầu thủ: ${player?.playerName}`}</Col>
+                            <Col>{`Quốc tịch: ${player?.nationality}`}</Col>
+                            <Col>{`Vị trí: ${player?.playerType}`}</Col>
+                            <Col>{`Số bàn thắng: ${player?.allGoals.length}`}</Col>
+                            <Col>{`Số kiến tạo: ${player?.allAssists.length}`}</Col>
                         </Row>
                     ))}
                 </Modal.Body>
