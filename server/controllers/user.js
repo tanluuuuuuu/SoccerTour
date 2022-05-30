@@ -43,7 +43,7 @@ export const signin = async (req, res) => {
     const { userName, password } = req.body;
 
     if (!userName || !password) {
-        res.status(400).send("Please provide username and password");
+        return res.status(400).send("Please provide username and password");
     }
 
     try {

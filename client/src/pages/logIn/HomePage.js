@@ -191,7 +191,7 @@ const HomePage = () => {
             </Modal>
 
             {/* <ModalRegister /> */}
-            <Modal
+            {/* <Modal
                 show={showRegisterForm}
                 onHide={() => {
                     setShowRegisterForm(false);
@@ -331,9 +331,9 @@ const HomePage = () => {
                         </Row>
                     </Form>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
 
-            <Container
+            {/* <Container
                 fluid
                 className="text-center text-white"
                 style={{
@@ -369,7 +369,7 @@ const HomePage = () => {
                         <p>LƯỢT XEM</p>
                     </Col>
                 </Row>
-            </Container>
+            </Container> */}
         </Container>
     );
 };

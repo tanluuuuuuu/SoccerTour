@@ -4,9 +4,9 @@ const erMessage = (erMessage = "", action) => {
     console.log(action.type);
     switch (action.type) {
         case SET_ER_MESSAGE:
-            return new String(action.payload);
+            return action.payload;
         case CLR_ER_MESSAGE:
-            return new String("");
+            return String("");
         default:
             return erMessage;
     }

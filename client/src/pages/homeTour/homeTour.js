@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,11 +11,16 @@ import {
     Navbar,
     Nav,
     Modal,
+    Alert,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import { createTour, getRanking, getRankingPlayer } from "../../actions/tour.js";
+import {
+    createTour,
+    getRanking,
+    getRankingPlayer,
+} from "../../actions/tour.js";
 import { signin, signup } from "../../actions/user.js";
 
 const initializeRegisterFormData = {
@@ -83,10 +88,13 @@ function HomeTour({ isLoading }) {
         setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
     };
 
+    const erMessage = useSelector((state) => state.erMessage);
+    useEffect(() => {
+        if (user.isLogin) loginFormClose();
+    }, [user]);
     const loginFormSubmit = async (e) => {
         e.preventDefault();
         await dispatch(signin(loginFormData));
-        setShowLoginForm(false);
     };
 
     const registerFormHandleChange = (e) => {
@@ -98,7 +106,7 @@ function HomeTour({ isLoading }) {
 
     const registerFormSubmit = async (e) => {
         e.preventDefault();
-        if (reenterPassword === registerFormData.password) {
+        if (reenterPassword && reenterPassword === registerFormData.password) {
             await dispatch(signup(registerFormData, setIsSuccess));
         } else {
             alert("Please confirm password");
@@ -310,7 +318,7 @@ function HomeTour({ isLoading }) {
                 ))}
             </Container>
         );
-    }
+    };
 
     const TourGallery = () => {
         return (
@@ -321,7 +329,7 @@ function HomeTour({ isLoading }) {
                 <h5>Hiện tại có {tour.allTeams.length} đội</h5>
                 <h5>Hiện tại có {tour.players.length} cầu thủ</h5>
                 <Ranking />
-                <RankingPlayer/>
+                <RankingPlayer />
             </Container>
         );
     };
@@ -367,6 +375,11 @@ function HomeTour({ isLoading }) {
                     <Modal.Title>Đăng nhập</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {erMessage !== "" ? (
+                        <Alert variant="danger">{erMessage}</Alert>
+                    ) : (
+                        <></>
+                    )}
                     <Form onSubmit={loginFormSubmit}>
                         <Row className="my-2">
                             <Col>
@@ -405,8 +418,8 @@ function HomeTour({ isLoading }) {
                                 </Button>
                             </Col>
                         </Row>
-                        <Row className="my-4 text-center">
-                            Quên mật khẩu
+                        <Row className="my-4">
+                            <Col>Quên mật khẩu</Col>
                         </Row>
                         <Row className="my-4">
                             <p className="my-1">
@@ -479,9 +492,8 @@ function HomeTour({ isLoading }) {
                                     name="country"
                                 >
                                     <option>Select your country</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value="Việt Nam">Việt Nam</option>
+                                    <option value="Other">Other</option>
                                 </Form.Select>
                             </Col>
                         </Row>
