@@ -68,23 +68,23 @@ function CreateTeam() {
         await dispatch(createTeam(teamData));
     };
 
-    const clear = () => {
-        setTeamData({
-            teamName: "",
-            homeGround: "",
-            playerList: [
-                {
-                    playerName: "",
-                    teamName: "",
-                    dayOfBirth: "",
-                    playerType: "",
-                    nationality: "",
-                    numberOfGoals: 0,
-                    numberOfAssits: 0,
-                },
-            ],
-        });
-    };
+    // const clear = () => {
+    //     setTeamData({
+    //         teamName: "",
+    //         homeGround: "",
+    //         playerList: [
+    //             {
+    //                 playerName: "",
+    //                 teamName: "",
+    //                 dayOfBirth: "",
+    //                 playerType: "",
+    //                 nationality: "",
+    //                 numberOfGoals: 0,
+    //                 numberOfAssits: 0,
+    //             },
+    //         ],
+    //     });
+    // };
 
     const handlePlayerChange = (index, e) => {
         let data = [...teamData.playerList];

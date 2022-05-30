@@ -87,7 +87,7 @@ export const changeTourRule = (tourData) => async (dispatch) => {
 
 export const acceptRegister = (teamId) => async (dispatch) => {
     try {
-        const { data } = await api.acceptRegister(teamId);
+        const { data } = await api.acceptRegister({teamId});
 
         console.log(data)
         dispatch({ type: ACCEPT_REGISTER, payload: data });

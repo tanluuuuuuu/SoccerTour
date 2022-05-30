@@ -851,7 +851,7 @@ export const changeTourRule = async (req, res) => {
 
 export const acceptRegister = async (req, res, next) => {
     try {
-        const teamId = req.body;
+        const {teamId} = req.body;
         const tour = await TourModel.findOne();
         const team = await teamModel.findById(teamId).populate({
             path: "playerList",
