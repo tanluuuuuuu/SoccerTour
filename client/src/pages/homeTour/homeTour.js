@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -55,7 +55,11 @@ const initializeTourData = {
 
 function HomeTour({ isLoading }) {
     const dispatch = useDispatch();
+
     const tour = useSelector((state) => state.tour);
+    const awayMatches = tour?.calendar?.awayMatches;
+    const homeMatches = tour?.calendar?.homeMatches;
+
     const user = useSelector((state) => state.user);
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -229,47 +233,37 @@ function HomeTour({ isLoading }) {
             <Container className="mt-3">
                 <h3 className="text-center bg-danger text-white">
                     Bảng xếp hạng
+                    <span
+                        style={{
+                            fontSize: "1rem",
+                            position: "absolute",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <i
+                            className="fa-solid fa-rotate"
+                            onClick={() => dispatch(getRanking())}
+                        ></i>
+                    </span>
                 </h3>
                 <Row className="text-center">
-                    <Col>
+                    <Col xs={6}>
                         <b>Tên đội bóng</b>
                     </Col>
-                    <Col>
-                        <b>Thắng</b>
-                    </Col>
-                    <Col>
-                        <b>Hòa</b>
-                    </Col>
-                    <Col>
-                        <b>Thua</b>
-                    </Col>
-                    <Col>
+                    <Col xs={3}>
                         <b>Hiệu số</b>
                     </Col>
-                    <Col>
+                    <Col xs={3}>
                         <b>Điểm số</b>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12}>
-                        <Button
-                            className="float-right"
-                            onClick={() => dispatch(getRanking())}
-                        >
-                            Cập nhật
-                        </Button>
                     </Col>
                 </Row>
                 {tour.ranking.map((team) => (
                     <Card className="mt-2" key={team.teamName}>
                         <Card.Body className="text-center">
                             <Row>
-                                <Col>{team.teamName}</Col>
-                                <Col>{team.gameWin.length}</Col>
-                                <Col>{team.gameDraw.length}</Col>
-                                <Col>{team.gameLose.length}</Col>
-                                <Col>{team.point}</Col>
-                                <Col>{team.point}</Col>
+                                <Col xs={6}>{team.teamName}</Col>
+                                <Col xs={3}>{team.point}</Col>
+                                <Col xs={3}>{team.point}</Col>
                             </Row>
                         </Card.Body>
                     </Card>
@@ -283,39 +277,78 @@ function HomeTour({ isLoading }) {
             <Container className="mt-3">
                 <h3 className="text-center bg-danger text-white">
                     Bảng xếp hạng cầu thủ
+                    <span
+                        style={{
+                            fontSize: "1rem",
+                            position: "absolute",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <i
+                            className="fa-solid fa-rotate"
+                            onClick={() => dispatch(getRankingPlayer())}
+                        ></i>
+                    </span>
                 </h3>
                 <Row className="text-center">
-                    <Col>
+                    <Col xs={6}>
                         <b>Tên cầu thủ</b>
                     </Col>
-                    <Col>
-                        <b>Số bàn thắng</b>
+                    <Col xs={3}>
+                        <b>Bàn thắng</b>
                     </Col>
-                    <Col>
-                        <b>Số kiến tạo</b>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12}>
-                        <Button
-                            className="float-right"
-                            onClick={() => dispatch(getRankingPlayer())}
-                        >
-                            Cập nhật
-                        </Button>
+                    <Col xs={3}>
+                        <b>Kiến tạo</b>
                     </Col>
                 </Row>
                 {tour.rankingPlayer.map((player) => (
                     <Card className="mt-2" key={player.playerName}>
                         <Card.Body className="text-center">
                             <Row>
-                                <Col>{player.playerName}</Col>
-                                <Col>{player.allGoals.length}</Col>
-                                <Col>{player.allAssists.length}</Col>
+                                <Col xs={6}>{player.playerName}</Col>
+                                <Col xs={3}>{player.allGoals.length}</Col>
+                                <Col xs={3}>{player.allAssists.length}</Col>
                             </Row>
                         </Card.Body>
                     </Card>
                 ))}
+            </Container>
+        );
+    };
+
+    const MatchHappen = () => {
+        return (
+            <Container className="mt-3">
+                <h3 className="text-center bg-danger text-white">
+                    Lịch thi đấu
+                </h3>
+                {homeMatches?.map((round) =>
+                    round.matches.map((match) => (
+                        <Card className="mt-2" key={match?._id}>
+                            <Card.Body className="text-center">
+                                <Row>
+                                    <Col xs={5}>{match?.team1?.teamName}</Col>
+                                    <Col xs={2}>VS</Col>
+                                    <Col xs={5}>{match?.team2?.teamName}</Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
+                    ))
+                )}
+
+                {awayMatches?.map((round) =>
+                    round.matches.map((match) => (
+                        <Card className="mt-2" key={match?._id}>
+                            <Card.Body className="text-center">
+                                <Row>
+                                    <Col xs={5}>{match?.team1?.teamName}</Col>
+                                    <Col xs={2}>VS</Col>
+                                    <Col xs={5}>{match?.team2?.teamName}</Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
+                    ))
+                )}
             </Container>
         );
     };
@@ -326,10 +359,19 @@ function HomeTour({ isLoading }) {
                 <h3 className="text-center bg-danger text-white">
                     {tour.tourName}
                 </h3>
-                <h5>Hiện tại có {tour.allTeams.length} đội</h5>
-                <h5>Hiện tại có {tour.players.length} cầu thủ</h5>
-                <Ranking />
-                <RankingPlayer />
+                <Row>
+                    <Col xs={8}>
+                        <MatchHappen />
+                    </Col>
+                    <Col xs={4}>
+                        <Row>
+                            <Ranking />
+                        </Row>
+                        <Row>
+                            <RankingPlayer />
+                        </Row>
+                    </Col>
+                </Row>
             </Container>
         );
     };

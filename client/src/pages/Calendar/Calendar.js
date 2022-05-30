@@ -70,6 +70,8 @@ const initializeMatchResult = {
 
 function Calendar() {
     const dispatch = useDispatch();
+    const erMessage = useSelector((state) => state.erMessage);
+
     const tour = useSelector((state) => state.tour);
     const [loading, setLoading] = useState(false);
     const [showMatchInfo, setShowMatchInfo] = useState(false);
@@ -89,7 +91,6 @@ function Calendar() {
         initializeMatchResult
     );
 
-    const erMessage = useSelector((state) => state.erMessage);
     const isInitialMount = useRef(true);
     const [alertNotification, setAlertNotification] = useState("");
     const [showAlert, setShowAlert] = useState(false);
@@ -131,7 +132,7 @@ function Calendar() {
                 _.update(
                     temp,
                     `${team}.goals[${goalIndex}].player`,
-                    () => selectedMatch[teami].playerList[playerIndex]._id
+                    () => selectedMatch[teami]?.playerList[playerIndex]?._id
                 );
 
                 let assistIndex = selectedMatch[teami].playerList.findIndex(
@@ -145,7 +146,7 @@ function Calendar() {
                 _.update(
                     temp,
                     `${team}.goals[${goalIndex}].assist`,
-                    () => selectedMatch[teami].playerList[assistIndex]._id
+                    () => selectedMatch[teami]?.playerList[assistIndex]?._id
                 );
             }
         }
@@ -161,29 +162,26 @@ function Calendar() {
     };
 
     const onChangeGoalTeam1 = (e) => {
-        const copy = _.cloneDeep(selectedMatchResult);
-        copy.team1Result.totalGoals = e.target.value;
-        const template = {
-            name: "",
-            player: "",
-            assist: "",
-            type: "",
-            minute: "",
-            second: "",
-        };
-        const tempArr = [];
-        if (e.target.value && e.target.value > 0) {
-            for (let index = 0; index < e.target.value; index++) {
-                tempArr.push(template);
-            }
-        }
-        copy.team1Result.goals = tempArr;
-        setSelectedMatchResult(copy);
+        setSelectedMatchResult({
+            ...selectedMatchResult,
+            team1Result: {
+                ...selectedMatchResult.team1Result,
+                totalGoals: e.target.value,
+            },
+        });
     };
 
     const onChangeGoalTeam2 = (e) => {
-        const copy = _.cloneDeep(selectedMatchResult);
-        copy.team2Result.totalGoals = e.target.value;
+        setSelectedMatchResult({
+            ...selectedMatchResult,
+            team2Result: {
+                ...selectedMatchResult.team2Result,
+                totalGoals: e.target.value,
+            },
+        });
+    };
+
+    const onAddGoalTeam1 = () => {
         const template = {
             name: "",
             player: "",
@@ -192,14 +190,37 @@ function Calendar() {
             minute: "",
             second: "",
         };
-        const tempArr = [];
-        if (e.target.value && e.target.value > 0) {
-            for (let index = 0; index < e.target.value; index++) {
-                tempArr.push(template);
-            }
-        }
-        copy.team2Result.goals = tempArr;
-        setSelectedMatchResult(copy);
+
+        const t = _.cloneDeep(selectedMatchResult);
+        t.team1Result.goals.push(template);
+        setSelectedMatchResult(t);
+    };
+
+    const onRemoveGoalTeam1 = (index) => {
+        const t = _.cloneDeep(selectedMatchResult);
+        t.team1Result.goals.splice(index, 1);
+        setSelectedMatchResult(t);
+    };
+
+    const onAddGoalTeam2 = (e) => {
+        const template = {
+            name: "",
+            player: "",
+            assist: "",
+            type: "",
+            minute: "",
+            second: "",
+        };
+
+        const t = _.cloneDeep(selectedMatchResult);
+        t.team2Result.goals.push(template);
+        setSelectedMatchResult(t);
+    };
+
+    const onRemoveGoalTeam2 = (index) => {
+        const t = _.cloneDeep(selectedMatchResult);
+        t.team2Result.goals.splice(index, 1);
+        setSelectedMatchResult(t);
     };
 
     const handleChangeGoal = (e, team, index) => {
@@ -627,6 +648,22 @@ function Calendar() {
                                                     >
                                                         <Col xs={1}>
                                                             <b>{index + 1}</b>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="danger"
+                                                                onClick={() => {
+                                                                    team ===
+                                                                    "team1Result"
+                                                                        ? onRemoveGoalTeam1(
+                                                                              index
+                                                                          )
+                                                                        : onRemoveGoalTeam2(
+                                                                              index
+                                                                          );
+                                                                }}
+                                                            >
+                                                                x
+                                                            </Button>
                                                         </Col>
                                                         <Col>
                                                             <Form.Select
@@ -808,6 +845,15 @@ function Calendar() {
                                                 );
                                             }
                                         )}
+                                        <Button
+                                            onClick={() => {
+                                                team === "team1Result"
+                                                    ? onAddGoalTeam1()
+                                                    : onAddGoalTeam2();
+                                            }}
+                                        >
+                                            +
+                                        </Button>
                                     </Col>
                                 ))}
                             </Row>

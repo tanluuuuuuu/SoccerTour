@@ -38,7 +38,7 @@ export const fetchOneTeam = async (req, res) => {
         if (!team) {
             return res.status(400).send("No team with that id");
         }
-        res.status(200).json(team)
+        res.status(200).json(team);
     } catch (error) {
         console.log(error);
         res.status(404).json({ error });
@@ -579,7 +579,7 @@ export const updateTour = async (req, res) => {
 
 export const updateMatchData = async (req, res) => {
     const { id: _id } = req.params;
-    const { match } = JSON.parse(JSON.stringify(req.body));
+    const match = JSON.parse(JSON.stringify(req.body));
     if (!mongoose.Types.ObjectId.isValid(_id))
         return res.status(500).send("No match with that id");
     match.team1 = match.team1._id;
@@ -615,7 +615,6 @@ export const updateMatchResult = async (req, res) => {
                 ) {
                     {
                         console.log(goal.minute * 60 + goal.second);
-                        console.log(sumTime);
                         console.log(goal.minute * 60 + goal.second > sumTime);
                         console.log("Thời điểm của bàn thắng không hợp lệ");
                         return res
@@ -637,10 +636,12 @@ export const updateMatchResult = async (req, res) => {
         if (
             sumResult1 !== parseInt(matchResult.team1Result.totalGoals) ||
             sumResult2 !== parseInt(matchResult.team2Result.totalGoals)
-        )
+        ) {
+            console.log("Danh sách bàn thắng và tỉ số không đồng nhất");
             return res
                 .status(500)
                 .send("Danh sách bàn thắng và tỉ số không đồng nhất");
+        }
         //.................................................
 
         // Create goal model to have reference
@@ -851,7 +852,7 @@ export const changeTourRule = async (req, res) => {
 
 export const acceptRegister = async (req, res, next) => {
     try {
-        const {teamId} = req.body;
+        const { teamId } = req.body;
         const tour = await TourModel.findOne();
         const team = await teamModel.findById(teamId).populate({
             path: "playerList",
