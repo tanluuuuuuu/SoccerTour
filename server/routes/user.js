@@ -4,7 +4,7 @@ import { AdminProtection } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post("/getUserList", AdminProtection, getUserList);
+router.get("/getUserList", AdminProtection, getUserList);
 router.post("/signin", signin);
 router.post("/signup", signup);
 router.post("/checksignin", checksignin);

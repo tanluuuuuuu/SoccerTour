@@ -42,7 +42,7 @@ export const updateMatchResult = (id, updateData) =>
     },
 });
 
-export const getUserList = () => axios.post(`${userUrl}/getUserList`, {
+export const getUserList = () => axios.get(`${userUrl}/getUserList`, {
     header: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
