@@ -6,11 +6,11 @@ export const UserProtection = async (req, res, next) => {
         let token;
 
         if (
-            req.body.header['Authorization'] &&
-            req.body.header['Authorization'].startsWith("Bearer")
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer")
         ) {
             // Bearer 123gh12j3gj12g3jh
-            token = req.body.header['Authorization'].split(" ")[1];
+            token = req.headers.authorization.split(" ")[1];
         }
 
         if (!token) {
@@ -39,12 +39,13 @@ export const UserProtection = async (req, res, next) => {
 export const AdminProtection = async (req, res, next) => {
     try {
         let token;
+
         if (
-            req.body.header['Authorization'] &&
-            req.body.header['Authorization'].startsWith("Bearer")
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer")
         ) {
             // Bearer 123gh12j3gj12g3jh
-            token = req.body.header['Authorization'].split(" ")[1];
+            token = req.headers.authorization.split(" ")[1];
         }
 
         if (!token) {

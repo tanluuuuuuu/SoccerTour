@@ -11,9 +11,9 @@ export const fetchTeams = () => axios.get(url);
 export const fetchOneTeam = (teamId) => axios.get(`${url}/team/${teamId}`);
 
 export const createTeam = (newTeam) => axios.post(url, newTeam, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
 
@@ -28,32 +28,32 @@ export const updateCalendar = (calendar) =>
 
 export const updateMatch = (id, updateData) =>
     axios.put(`${url}/calendar/${id}`, updateData, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
 
 export const updateMatchResult = (id, updateData) =>
     axios.put(`${url}/calendar/result/${id}`, updateData, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
 
 export const getUserList = () => axios.get(`${userUrl}/getUserList`, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
 
 export const CheckSignin = (token) =>
     axios.post(`${userUrl}/checksignin`, token, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
 
@@ -69,8 +69,8 @@ export const getRankingPlayer = () => axios.get(`${url}/rankingPlayer`);
 
 export const changeTourRule = (tourData) =>
     axios.patch(`${url}/rule`, tourData, {
-    header: {
+    headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}` ,
+        authorization: `Bearer ${localStorage.getItem("authToken")}` ,
     },
 });
