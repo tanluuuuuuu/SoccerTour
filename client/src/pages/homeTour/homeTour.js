@@ -14,10 +14,8 @@ import {
     Alert,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import {
-    createTour,
     getRanking,
     getRankingPlayer,
 } from "../../actions/tour.js";
@@ -33,24 +31,6 @@ const initializeRegisterFormData = {
 const initializeLoginFormData = {
     phoneNumber: "",
     password: "",
-};
-
-const initializeTourData = {
-    allTeams: [],
-    players: [],
-    calendar: {
-        awayMatches: [],
-        homeMatches: [],
-    },
-    tourName: "",
-    maxTeam: "",
-    minTeam: "",
-    maxPlayerOfTeam: "",
-    minPlayerOfTeam: "",
-    maxForeignPlayer: "",
-    maxAge: "",
-    minAge: "",
-    ranking: [],
 };
 
 function HomeTour({ isLoading }) {
@@ -80,8 +60,6 @@ function HomeTour({ isLoading }) {
             history.push("/");
         }
     }, [user]);
-
-    const [tourData, setTourData] = useState(initializeTourData);
 
     const loginFormClose = () => {
         setLoginFormData(initializeLoginFormData);
@@ -116,117 +94,6 @@ function HomeTour({ isLoading }) {
             alert("Please confirm password");
         }
     };
-
-    // if (Object.keys(tour).length === 0) {
-    //     return (
-    //         <Container className="mt-5 text-center">
-    //             {/* <h3 className="text-center">Tạo giải đấu đầu tiên</h3>
-    //             <Container fluid="sm">
-    //                 <Form>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col>
-    //                             <Form.Label>Tên giải đấu</Form.Label>
-    //                             <Form.Control
-    //                                 type="text"
-    //                                 name="tourName"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.tourName}
-    //                             />
-    //                         </Col>
-    //                     </Row>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col>
-    //                             <Form.Label>Số đội tối thiểu</Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="minTeam"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.minTeam}
-    //                             />
-    //                         </Col>
-    //                         <Col>
-    //                             <Form.Label>Số đội tối đa</Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="maxTeam"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.maxTeam}
-    //                             />
-    //                         </Col>
-    //                     </Row>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col>
-    //                             <Form.Label>
-    //                                 Số cầu thủ tối thiểu mỗi đội
-    //                             </Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="minPlayerOfTeam"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.minPlayerOfTeam}
-    //                             />
-    //                         </Col>
-    //                         <Col>
-    //                             <Form.Label>
-    //                                 Số cầu thủ tối đa mỗi đội
-    //                             </Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="maxPlayerOfTeam"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.maxPlayerOfTeam}
-    //                             />
-    //                         </Col>
-    //                     </Row>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col>
-    //                             <Form.Label>Độ tuổi tối thiểu</Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="minAge"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.minAge}
-    //                             />
-    //                         </Col>
-    //                         <Col>
-    //                             <Form.Label>Độ tuổi tối đa</Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="maxAge"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.maxAge}
-    //                             />
-    //                         </Col>
-    //                     </Row>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col>
-    //                             <Form.Label>
-    //                                 Số cầu thủ nước ngoài tối đa
-    //                             </Form.Label>
-    //                             <Form.Control
-    //                                 type="number"
-    //                                 name="maxForeignPlayer"
-    //                                 onChange={handleChange}
-    //                                 value={tourData.maxForeignPlayer}
-    //                             />
-    //                         </Col>
-    //                     </Row>
-    //                     <Row className="mx-5 my-2">
-    //                         <Col sx={12}>
-    //                             <Button
-    //                                 className="text-right float-right my-2"
-    //                                 type="button"
-    //                                 onClick={handleSubmit}
-    //                             >
-    //                                 Tạo giải đấu
-    //                             </Button>
-    //                         </Col>
-    //                     </Row>
-    //                 </Form>
-    //             </Container> */}
-    //         </Container>
-    //     );
-    // }
 
     const Ranking = () => {
         return (

@@ -39,6 +39,7 @@ const teamSchema = mongoose.Schema({
     gameDraw: [{ type: mongoose.Types.ObjectId, ref: "matchModel" }],
     gameLose: [{ type: mongoose.Types.ObjectId, ref: "matchModel" }],
     point: { type: Number, default: 0 },
+    goalDifference: { type: Number, default: 0 },
 });
 
 const goalSchema = mongoose.Schema({
@@ -162,7 +163,19 @@ const TourSchema = mongoose.Schema({
     },
     dateStart: Date,
     dateEnd: Date,
-    registerList: [{ type: mongoose.Types.ObjectId, ref: "teamModel" }]
+    winPoint: {
+        type: Number,
+        default: 3,
+    },
+    drawPoint: {
+        type: Number,
+        default: 1,
+    },
+    losePoint: {
+        type: Number,
+        default: 0,
+    },
+    registerList: [{ type: mongoose.Types.ObjectId, ref: "teamModel" }],
 });
 
 const seasonSchema = mongoose.Schema({
@@ -189,7 +202,6 @@ export const teamModel = mongoose.model("teamModel", teamSchema);
 export const TourModel = mongoose.model("TourModel", TourSchema);
 export const matchModel = mongoose.model("matchModel", matchSchema);
 
-
 /* User */
 
 const userSchema = mongoose.Schema({
@@ -211,8 +223,8 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['teamManager', 'adMin'],
-        default: 'teamManager'
+        enum: ["teamManager", "adMin"],
+        default: "teamManager",
     },
     team: {
         type: mongoose.Types.ObjectId,
@@ -241,4 +253,3 @@ userSchema.methods.getSignedToken = function () {
 };
 
 export const userModel = mongoose.model("userModel", userSchema);
-

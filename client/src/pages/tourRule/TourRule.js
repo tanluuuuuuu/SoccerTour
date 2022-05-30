@@ -6,7 +6,6 @@ import { changeTourRule } from "../../actions/tour";
 function TourRule() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const [Show, setShow] = useState(false);
     const tour = useSelector((state) => state.tour);
 
     const initializeTourData = {
@@ -18,6 +17,9 @@ function TourRule() {
         maxForeignPlayer: tour.maxForeignPlayer,
         maxAge: tour.maxAge,
         minAge: tour.minAge,
+        winPoint: tour.winPoint,
+        drawPoint: tour.drawPoint,
+        losePoint: tour.losePoint,
         registerList: [],
     };
     const [tourData, setTourData] = useState(initializeTourData);
@@ -37,6 +39,14 @@ function TourRule() {
     const onReset = () => {
         setTourData(initializeTourData);
     };
+
+    const onTourReport = () => {
+
+    }
+
+    const endTour = () => {
+
+    }
 
     return (
         <Container className="mt-5">
@@ -136,6 +146,41 @@ function TourRule() {
                         />
                     </Col>
                 </Row>
+                <Row>
+                    <Col>
+                    <Form.Label>Số điểm thắng</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.winPoint}
+                            name="winPoint"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                    <Col>
+                    <Form.Label>Số điểm hòa</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.drawPoint}
+                            name="drawPoint"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                    <Col>
+                    <Form.Label>Số điểm thua</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min={0}
+                            value={tourData.losePoint}
+                            name="losePoint"
+                            onChange={handleChange}
+                            required
+                        />
+                    </Col>
+                </Row>
 
                 <Button
                     variant="secondary"
@@ -156,6 +201,22 @@ function TourRule() {
                         <></>
                     )}
                     Save
+                </Button>
+                <Button
+                    variant="secondary"
+                    type="button"
+                    className="float-right mt-2 mx-2"
+                    onClick={onTourReport}
+                >
+                    Lập báo cáo giải
+                </Button>
+                <Button
+                    variant="secondary"
+                    type="button"
+                    className="float-right mt-2 mx-2"
+                    onClick={endTour}
+                >
+                    Kết thúc giải đấu
                 </Button>
             </Form>
         </Container>

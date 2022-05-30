@@ -708,7 +708,8 @@ export const updateMatchResult = async (req, res) => {
             team1.gameWin.push(updatedMatchResult._id);
             team2.gameLose.push(updatedMatchResult._id);
 
-            team1.point += 3;
+            team1.point += tour.winPoint;
+            team2.point += tour.losePoint;
 
             console.log("Team1 win");
         } else if (
@@ -718,18 +719,28 @@ export const updateMatchResult = async (req, res) => {
             team1.gameLose.push(updatedMatchResult._id);
             team2.gameWin.push(updatedMatchResult._id);
 
-            team2.point += 3;
+            team2.point += tour.winPoint;
+            team1.point += tour.losePoint;
 
             console.log("Team2 win");
         } else {
             team1.gameDraw.push(updatedMatchResult._id);
             team2.gameDraw.push(updatedMatchResult._id);
 
-            team1.point += 1;
-            team2.point += 1;
+            team1.point += tour.drawPoint;
+            team2.point += tour.drawPoint;
 
             console.log("Draw");
         }
+        
+        team1.goalDifference =
+            team1.goalDifference +
+            matchResult.team1Result.totalGoals -
+            matchResult.team2Result.totalGoals;
+        team2.goalDifference =
+            team2.goalDifference +
+            matchResult.team2Result.totalGoals -
+            matchResult.team1Result.totalGoals;
 
         await team1.save();
         await team2.save();
