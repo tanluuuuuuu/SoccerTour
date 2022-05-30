@@ -97,7 +97,7 @@ function Calendar() {
         if (isInitialMount.current) {
             isInitialMount.current = false;
         } else {
-            if (erMessage !== " ") {
+            if (erMessage.length > 0) {
                 setAlertNotification(`${erMessage}`);
                 setShowAlert(true);
             } else {

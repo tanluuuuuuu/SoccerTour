@@ -31,7 +31,12 @@ export const createTour = (tourData) => axios.post(`${url}/calendar`, tourData);
 export const fetchTour = () => axios.get(`${url}/calendar`);
 
 export const updateCalendar = (calendar) =>
-    axios.patch(`${url}/calendar`, calendar);
+    axios.patch(`${url}/calendar`, calendar, {
+        headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+    });
 
 export const updateMatch = (id, updateData) =>
     axios.put(`${url}/calendar/${id}`, updateData, {
