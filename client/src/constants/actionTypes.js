@@ -4,6 +4,7 @@ export const FETCH_ALL_TEAM = "FETCH_ALL_TEAM";
 export const CREATE_TEAM = "CREATE_TEAM";
 export const UPDATE_TEAM = "UPDATE_TEAM";
 export const ACCEPT_REGISTER = "ACCEPT_REGISTER";
+export const FETCH_ONE_TEAM = "FETCH_ONE_TEAM";
 
 export const UPDATE_MATCH = "UPDATE_MATCH";
 export const UPDATE_MATCH_RESULT = "UPDATE_MATCH_RESULT";

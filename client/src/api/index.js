@@ -8,7 +8,7 @@ export const fetchPlayers = (playerAddresses) =>
 
 export const fetchTeams = () => axios.get(url);
 
-export const fetchOneTeam = (teamId) => axios.get(url);
+export const fetchOneTeam = (teamId) => axios.get(`${url}/team/${teamId}`);
 
 export const createTeam = (newTeam) => axios.post(url, newTeam, {
     header: {

@@ -24,6 +24,27 @@ const helperFunction = {
 };
 
 // Teams
+export const fetchOneTeam = async (req, res) => {
+    try {
+        const { teamId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(teamId)) {
+            return res.status(400).send("Invalid team id");
+        }
+
+        const team = await teamModel
+            .findById(teamId)
+            .populate({ path: "playerList", model: "playerModel" });
+        if (!team) {
+            return res.status(400).send("No team with that id");
+        }
+        res.status(200).json(team)
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({ error });
+    }
+};
+
 export const getTeams = async (req, res) => {
     try {
         const teams = await teamModel.find();
@@ -614,7 +635,7 @@ export const updateMatchResult = async (req, res) => {
             }
         }
         if (
-            sumResult1 !== parseInt(matchResult.team1Result.totalGoals ) ||
+            sumResult1 !== parseInt(matchResult.team1Result.totalGoals) ||
             sumResult2 !== parseInt(matchResult.team2Result.totalGoals)
         )
             return res
