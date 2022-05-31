@@ -26,7 +26,6 @@ const teamSchema = mongoose.Schema({
     teamName: {
         type: String,
         required: [true, "Vui lòng bổ sung tên đội"],
-        unique: true,
     },
     homeGround: {
         type: String,

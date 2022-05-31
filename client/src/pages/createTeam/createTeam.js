@@ -6,6 +6,7 @@ import {
     Row,
     Col,
     Modal,
+    Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,23 +26,28 @@ const initializeTeamData = {
             numberOfAssits: 0,
         },
     ],
-}
+};
 
 function CreateTeam() {
     const dispatch = useDispatch();
+    const tour = useSelector((state) => state.tour);
     const isOpenForRegister = useSelector(
         (state) => state.tour.isAcceptingRegister
     );
+    const [loading, setLoading] = useState(false);
 
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user);
     const userTeam = useSelector((state) => {
-        let searchTeam = state.tour.allTeams.find((team) => team._id === user.team)
-        if (!searchTeam)
-        {
-            searchTeam = state.tour.registerList.find((team) => team._id === user.team)
-        } 
-        return searchTeam
-    })
+        let searchTeam = state.tour.allTeams.find(
+            (team) => team._id === user.team
+        );
+        if (!searchTeam) {
+            searchTeam = state.tour.registerList.find(
+                (team) => team._id === user.team
+            );
+        }
+        return searchTeam;
+    });
 
     const isInitialMount = useRef(true);
     const erMessage = useSelector((state) => state.erMessage);
@@ -61,12 +67,15 @@ function CreateTeam() {
         }
     }, [erMessage]);
 
-    const [teamData, setTeamData] = useState((userTeam) ? userTeam : initializeTeamData);
+    const [teamData, setTeamData] = useState(
+        userTeam ? userTeam : initializeTeamData
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isOpenForRegister)
-            await dispatch(createTeam(teamData));
+        setLoading(true);
+        await dispatch(createTeam(teamData));
+        setLoading(false);
     };
 
     const handlePlayerChange = (index, e) => {
@@ -107,6 +116,40 @@ function CreateTeam() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [modalTourRule, setModalTourRule] = useState(false);
+    const TourRule = () => {
+        return (
+            <Modal show={modalTourRule} onHide={() => setModalTourRule(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Quy định giải đấu</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Số đội tối đa: {tour.maxTeam}</p>
+                    <p>Số đội tối thiểu: {tour.minTeam}</p>
+                    <p>Số cầu thủ tối đa mỗi đội: {tour.maxPlayerOfTeam}</p>
+                    <p>Số cầu thủ tối thiểu mỗi đội: {tour.minPlayerOfTeam}</p>
+                    <p>
+                        Số cầu thủ ngước ngoài tối đa mỗi đội:{" "}
+                        {tour.maxForeignPlayer}
+                    </p>
+                    <p>Độ tuổi tối thiểu: {tour.minAge}</p>
+                    <p>Độ tuổi tối đa: {tour.maxAge}</p>
+                    <p>Điểm số mỗi trận thắng: {tour.winPoint}</p>
+                    <p>Điểm số mỗi trận hòa: {tour.drawPoint}</p>
+                    <p>Điểm số mỗi trận thua: {tour.losePoint}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setModalTourRule(false)}
+                    >
+                        Ok
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
+
     return (
         <Container className="mt-5">
             <Modal show={show} onHide={handleClose}>
@@ -120,7 +163,10 @@ function CreateTeam() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
+            <TourRule />
+            <Button className="mb-2" onClick={() => setModalTourRule(true)}>
+                Xem quy định giải đấu
+            </Button>
             <Form onSubmit={handleSubmit}>
                 <Row>
                     <Col>
@@ -209,10 +255,9 @@ function CreateTeam() {
                                         type="date"
                                         value={player.dayOfBirth}
                                         name="dayOfBirth"
-                                        onChange={(e) =>    
+                                        onChange={(e) =>
                                             handlePlayerChange(index, e)
                                         }
-                                        
                                     />
                                 </Form.Group>
                             </Col>
@@ -286,10 +331,13 @@ function CreateTeam() {
                         type="submit"
                         disabled={!isOpenForRegister && !user.team}
                     >
-                        {(isOpenForRegister) ? "Đăng ký" : "Cập nhật đội bóng"}
+                        {isOpenForRegister ? "Đăng ký" : "Cập nhật đội bóng"}
                     </Button>
                 </div>
             </Form>
+            <div className="text-center">
+                {loading ? <Spinner animation="border" /> : <></>}
+            </div>
         </Container>
     );
 }

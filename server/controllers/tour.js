@@ -121,6 +121,7 @@ export const createTeam = async (req, res, next) => {
         const listPlayerObject = [];
         for (const player of team.playerList) {
             player.teamName = team.teamName;
+            console.log("check");
             const pl = await playerModel(player);
             await pl.save();
             listPlayer.push(pl._id.toString());
