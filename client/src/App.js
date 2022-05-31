@@ -11,6 +11,7 @@ import TourRule from "./pages/tourRule/TourRule";
 import UserList from "./pages/UserList/UserList";
 import User from "./pages/User/User.js";
 import RegisterList from "./pages/RegisterList/RegisterList.js";
+import TeamCalendar from "./pages/TeamCalendar/TeamCalendar.js";
 
 import { GlobalStyle } from "./globalStyledComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -33,8 +34,7 @@ function App() {
         };
         go();
         const token = localStorage.getItem("authToken");
-        if (token)
-            dispatch(checkSignIn({token}));
+        if (token) dispatch(checkSignIn({ token }));
     }, [dispatch]);
 
     return (
@@ -82,6 +82,13 @@ function App() {
                         path="/registerlist"
                     >
                         <RegisterList />
+                    </ProtectedRoute>
+                    <ProtectedRoute
+                        exact
+                        isLogin={user.isLogin}
+                        path="/teamcalendar"
+                    >
+                        <TeamCalendar />
                     </ProtectedRoute>
                 </Switch>
             </Router>

@@ -128,12 +128,22 @@ function Sidebar() {
                         <></>
                     )}
 
+                    {user.role === "teamManager" ? (
+                        <Item>
+                            <Link to={"/teamcalendar"}>
+                                <i class="fa-solid fa-calendar"></i>
+                            </Link>
+                        </Item>
+                    ) : (
+                        <></>
+                    )}
+
                     <Item>
                         <Link to={"/search"}>
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </Link>
                     </Item>
-                    
+
                     {user.role === "admin" ? (
                         <Item>
                             <Link to={"/rule"}>
@@ -152,6 +162,7 @@ function Sidebar() {
                     ) : (
                         <></>
                     )}
+
                     {user.role === "admin" ? (
                         <Item>
                             <Link to={"/userlist"}>
