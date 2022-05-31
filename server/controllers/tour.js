@@ -196,6 +196,14 @@ export const getTour = async (req, res) => {
                         },
                     },
                     {
+                        path: "playerAttending.team1",
+                        model: "playerModel",
+                    },
+                    {
+                        path: "playerAttending.team2",
+                        model: "playerModel",
+                    },
+                    {
                         path: "result",
                         model: "matchResultModel",
                         populate: [
@@ -732,7 +740,7 @@ export const updateMatchResult = async (req, res) => {
 
             console.log("Draw");
         }
-        
+
         team1.goalDifference =
             team1.goalDifference +
             matchResult.team1Result.totalGoals -

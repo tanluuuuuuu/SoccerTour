@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import { Container, Button, Form, Row, Col, Spinner } from "react-bootstrap";
+import {
+    Container,
+    Button,
+    Form,
+    Row,
+    Col,
+    Spinner,
+    Modal,
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { changeTourRule } from "../../actions/tour";
+import TourReport from "./TourReport/TourReport";
 
 function TourRule() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const [showTourReport, setShowTourReport] = useState(false);
     const tour = useSelector((state) => state.tour);
 
     const initializeTourData = {
@@ -41,12 +51,10 @@ function TourRule() {
     };
 
     const onTourReport = () => {
+        setShowTourReport(true);
+    };
 
-    }
-
-    const endTour = () => {
-
-    }
+    const endTour = () => {};
 
     return (
         <Container className="mt-5">
@@ -148,7 +156,7 @@ function TourRule() {
                 </Row>
                 <Row>
                     <Col>
-                    <Form.Label>Số điểm thắng</Form.Label>
+                        <Form.Label>Số điểm thắng</Form.Label>
                         <Form.Control
                             type="number"
                             min={0}
@@ -159,7 +167,7 @@ function TourRule() {
                         />
                     </Col>
                     <Col>
-                    <Form.Label>Số điểm hòa</Form.Label>
+                        <Form.Label>Số điểm hòa</Form.Label>
                         <Form.Control
                             type="number"
                             min={0}
@@ -170,7 +178,7 @@ function TourRule() {
                         />
                     </Col>
                     <Col>
-                    <Form.Label>Số điểm thua</Form.Label>
+                        <Form.Label>Số điểm thua</Form.Label>
                         <Form.Control
                             type="number"
                             min={0}
@@ -219,6 +227,19 @@ function TourRule() {
                     Kết thúc giải đấu
                 </Button>
             </Form>
+            <Modal
+                show={showTourReport}
+                onHide={() => setShowTourReport(false)}
+                size="lg"
+                fullscreen={true}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Tiến độ giải đấu</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TourReport />
+                </Modal.Body>
+            </Modal>
         </Container>
     );
 }

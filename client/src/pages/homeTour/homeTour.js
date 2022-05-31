@@ -129,7 +129,7 @@ function HomeTour({ isLoading }) {
                         <Card.Body className="text-center">
                             <Row>
                                 <Col xs={6}>{team.teamName}</Col>
-                                <Col xs={3}>{team.point}</Col>
+                                <Col xs={3}>{team.goalDifference}</Col>
                                 <Col xs={3}>{team.point}</Col>
                             </Row>
                         </Card.Body>
