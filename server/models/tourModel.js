@@ -16,7 +16,7 @@ const playerSchema = mongoose.Schema({
         type: String,
         enum: ["Tiền đạo", "Tiền vệ", "Hậu vệ", "Thủ môn", ""],
     },
-    teamName: String,
+    teamName: { type: String },
     allGoals: [{ type: mongoose.Types.ObjectId, ref: "goalModel" }],
     allAssists: [{ type: mongoose.Types.ObjectId, ref: "goalModel" }],
 });
@@ -26,6 +26,7 @@ const teamSchema = mongoose.Schema({
     teamName: {
         type: String,
         required: [true, "Vui lòng bổ sung tên đội"],
+        unique: true,
     },
     homeGround: {
         type: String,
@@ -214,6 +215,7 @@ const userSchema = mongoose.Schema({
     username: {
         type: String,
         required: [true, "Please provide a username"],
+        unique: true,
     },
     password: {
         type: String,

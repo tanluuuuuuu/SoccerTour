@@ -15,10 +15,7 @@ import {
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
-import {
-    getRanking,
-    getRankingPlayer,
-} from "../../actions/tour.js";
+import { getRanking, getRankingPlayer } from "../../actions/tour.js";
 import { signin, signup } from "../../actions/user.js";
 
 const initializeRegisterFormData = {
@@ -327,24 +324,7 @@ function HomeTour({ isLoading }) {
                                 </Button>
                             </Col>
                         </Row>
-                        <Row className="my-4">
-                            <Col>Quên mật khẩu</Col>
-                        </Row>
-                        <Row className="my-4">
-                            <p className="my-1">
-                                <small>Đăng nhập bằng</small>
-                            </p>
-                            <Col>
-                                <Button variant="primary" className="w-100">
-                                    Facebook
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button variant="danger" className="w-100">
-                                    Google
-                                </Button>
-                            </Col>
-                        </Row>
+
                         <Row className="my-4">
                             <p className="my-1">
                                 <small>Chưa có tài khoản?</small>
@@ -477,29 +457,6 @@ function HomeTour({ isLoading }) {
                         ) : (
                             <></>
                         )}
-                        <Row className="my-4">
-                            <p className="my-1">
-                                <small>Đăng nhập bằng</small>
-                            </p>
-                            <Col>
-                                <Button
-                                    variant="primary"
-                                    className="w-100"
-                                    disabled={isSuccess}
-                                >
-                                    Facebook
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button
-                                    variant="danger"
-                                    className="w-100"
-                                    disabled={isSuccess}
-                                >
-                                    Google
-                                </Button>
-                            </Col>
-                        </Row>
                     </Form>
                 </Modal.Body>
             </Modal>

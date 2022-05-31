@@ -13,6 +13,7 @@ export const CREATE_TOUR = "CREATE_TOUR";
 export const FETCH_ALL_TOUR = "FETCH_ALL_TOUR";
 export const UPDATE_CALENDAR = "UPDATE_CALENDAR";
 export const CHANGE_TOUR_RULE = "CHANGE_TOUR_RULE";
+export const DELETE_REGISTER = "DELETE_REGISTER";
 
 export const CHECK_SIGN_IN = "CHECK_SIGN_IN";
 export const GET_USER_LIST = "GET_USER_LIST";

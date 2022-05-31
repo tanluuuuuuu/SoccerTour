@@ -65,32 +65,13 @@ function CreateTeam() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await dispatch(createTeam(teamData));
+        if (isOpenForRegister)
+            await dispatch(createTeam(teamData));
     };
-
-    // const clear = () => {
-    //     setTeamData({
-    //         teamName: "",
-    //         homeGround: "",
-    //         playerList: [
-    //             {
-    //                 playerName: "",
-    //                 teamName: "",
-    //                 dayOfBirth: "",
-    //                 playerType: "",
-    //                 nationality: "",
-    //                 numberOfGoals: 0,
-    //                 numberOfAssits: 0,
-    //             },
-    //         ],
-    //     });
-    // };
 
     const handlePlayerChange = (index, e) => {
         let data = [...teamData.playerList];
 
-        // if (e.target.name === "dayOfBirth")
-        //     data[index][e.target.name] = Date(e.target.value);
         data[index][e.target.name] = e.target.value;
 
         setTeamData({ ...teamData, playerList: data });
@@ -294,7 +275,7 @@ function CreateTeam() {
                         onClick={() => {
                             addPlayerData();
                         }}
-                        disabled={!isOpenForRegister}
+                        disabled={!isOpenForRegister && !user.team}
                     >
                         +
                     </Button>
@@ -303,9 +284,9 @@ function CreateTeam() {
                     <Button
                         variant="danger"
                         type="submit"
-                        disabled={!isOpenForRegister}
+                        disabled={!isOpenForRegister && !user.team}
                     >
-                        Đăng ký
+                        {(isOpenForRegister) ? "Đăng ký" : "Cập nhật đội bóng"}
                     </Button>
                 </div>
             </Form>

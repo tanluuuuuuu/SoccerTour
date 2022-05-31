@@ -12,7 +12,8 @@ import {
     getRankPlayer,
     changeTourRule,
     acceptRegister,
-    fetchOneTeam
+    fetchOneTeam,
+    deleteRegister
 } from "../controllers/tour.js";
 import { UserProtection, AdminProtection } from "../middleware/auth.js";
 
@@ -30,6 +31,7 @@ router.get("/ranking", getRank);
 router.get("/rankingPlayer", getRankPlayer);
 router.patch("/rule", AdminProtection, changeTourRule);
 router.post("/acceptregister", AdminProtection, acceptRegister, getTour);
+router.post("/deleteregister", AdminProtection, deleteRegister, getTour);
 router.get("/team/:teamId", fetchOneTeam)
 
 export default router;

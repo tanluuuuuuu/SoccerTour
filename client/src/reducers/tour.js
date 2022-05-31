@@ -10,6 +10,7 @@ import {
     FETCH_RANKING_PLAYER,
     CHANGE_TOUR_RULE,
     ACCEPT_REGISTER,
+    DELETE_REGISTER,
 } from "../constants/actionTypes.js";
 
 const tour = (tour = {}, action) => {
@@ -45,21 +46,19 @@ const tour = (tour = {}, action) => {
             }
             return tour;
         case UPDATE_MATCH_RESULT:
-            if (Object.keys(tour).length !== 0) {
-                for (let homeOrAway of ["awayMatches", "homeMatches"]) {
-                    for (const round in tour.calendar[homeOrAway]) {
-                        for (const match in tour.calendar[homeOrAway][round]
-                            .matches) {
-                            if (
-                                tour.calendar[homeOrAway][round].matches[match]
-                                    .result._id === action.payload._id
-                            ) {
-                                tour.calendar[homeOrAway][round].matches[
-                                    match
-                                ].result = action.payload;
-                                console.log("Updated result in reducer");
-                                return { ...tour };
-                            }
+            for (let homeOrAway of ["awayMatches", "homeMatches"]) {
+                for (const round in tour.calendar[homeOrAway]) {
+                    for (const match in tour.calendar[homeOrAway][round]
+                        .matches) {
+                        if (
+                            tour.calendar[homeOrAway][round].matches[match]
+                                .result._id === action.payload._id
+                        ) {
+                            tour.calendar[homeOrAway][round].matches[
+                                match
+                            ].result = action.payload;
+                            console.log("Updated result in reducer");
+                            return { ...tour };
                         }
                     }
                 }
@@ -77,6 +76,8 @@ const tour = (tour = {}, action) => {
         case CHANGE_TOUR_RULE:
             return { ...tour, ...action.payload };
         case ACCEPT_REGISTER:
+            return { ...tour, ...action.payload };
+        case DELETE_REGISTER:
             return { ...tour, ...action.payload };
         default:
             return tour;

@@ -9,7 +9,8 @@ import {
     SET_ER_MESSAGE,
     CLR_ER_MESSAGE,
     CHANGE_TOUR_RULE,
-    ACCEPT_REGISTER
+    ACCEPT_REGISTER,
+    DELETE_REGISTER
 } from "../constants/actionTypes.js";
 
 export const createTeam = (team) => async (dispatch) => {
@@ -89,8 +90,17 @@ export const acceptRegister = (teamId) => async (dispatch) => {
     try {
         const { data } = await api.acceptRegister({teamId});
 
-        console.log(data)
         dispatch({ type: ACCEPT_REGISTER, payload: data });
+    } catch (error) {
+        console.log(error.response.data);
+    }
+}
+
+export const deleteRegister = (teamId) => async (dispatch) => {
+    try {
+        const { data } = await api.deleteRegister({teamId});
+
+        dispatch({ type: DELETE_REGISTER, payload: data });
     } catch (error) {
         console.log(error.response.data);
     }

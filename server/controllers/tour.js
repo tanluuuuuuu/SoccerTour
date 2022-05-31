@@ -894,3 +894,20 @@ export const acceptRegister = async (req, res, next) => {
         res.status(404).send(error.message);
     }
 };
+
+export const deleteRegister = async (req, res, next) => {
+    try {
+        const { teamId } = req.body;
+        const tour = await TourModel.findOne();
+
+        _.remove(tour.registerList, (teamRegiter) => {
+            return teamRegiter._id.equals(mongoose.Types.ObjectId(teamId));
+        });
+
+        await TourModel.findByIdAndUpdate(tour._id, tour);
+        console.log("Register delete successfully");
+        next();
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};

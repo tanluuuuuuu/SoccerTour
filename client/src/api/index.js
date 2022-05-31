@@ -26,6 +26,14 @@ export const acceptRegister = (data) =>
         },
     });
 
+export const deleteRegister = (data) =>
+    axios.post(`${url}/deleteregister`, data, {
+        headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+    });
+
 export const createTour = (tourData) => axios.post(`${url}/calendar`, tourData);
 
 export const fetchTour = () => axios.get(`${url}/calendar`);
