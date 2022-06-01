@@ -277,12 +277,18 @@ function HomeTourComponent({ isLoading }) {
             )}
 
             {/* <ModalLogin /> */}
-            <Modal show={showLoginForm} onHide={() => loginFormClose()}>
+            <Modal
+                show={showLoginForm}
+                onHide={() => {
+                    loginFormClose();
+                    dispatch({ type: "CLR_ER_MESSAGE", payload: null });
+                }}
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>Đăng nhập</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {erMessage !== "" ? (
+                    {erMessage.length > 0 ? (
                         <Alert variant="danger">{erMessage}</Alert>
                     ) : (
                         <></>
@@ -355,76 +361,95 @@ function HomeTourComponent({ isLoading }) {
                     if (isSuccess) {
                         setIsSuccess(false);
                     }
+                    dispatch({ type: "CLR_ER_MESSAGE", payload: null });
                 }}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Đăng ký</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {erMessage.length > 0 ? (
+                        <Alert variant="danger">{erMessage}</Alert>
+                    ) : (
+                        <></>
+                    )}
                     <Form onSubmit={registerFormSubmit}>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    type="tel"
-                                    placeholder="Nhập số điện thoại"
-                                    name="phoneNumber"
-                                    pattern="[0-9]{10}"
-                                    value={registerFormData.phoneNumber}
-                                    onChange={registerFormHandleChange}
-                                />
-                            </Col>
-                            <Col>
-                                <Form.Label>Country</Form.Label>
-                                <Form.Select
-                                    aria-label="Default select example"
-                                    onChange={registerFormHandleChange}
-                                    name="country"
-                                >
-                                    <option>Select your country</option>
-                                    <option value="Việt Nam">Việt Nam</option>
-                                    <option value="Other">Other</option>
-                                </Form.Select>
-                            </Col>
-                        </Row>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Tên tài khoản</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập tên tài khoản"
-                                    name="userName"
-                                    value={registerFormData.userName}
-                                    onChange={registerFormHandleChange}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Nhập mật khẩu"
-                                    name="password"
-                                    value={registerFormData.password}
-                                    onChange={registerFormHandleChange}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Xác nhận mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Nhập lại mật khẩu"
-                                    name="reenterPassword"
-                                    value={reenterPassword}
-                                    onChange={(e) =>
-                                        setReenterPassword(e.target.value)
-                                    }
-                                />
-                            </Col>
-                        </Row>
+                        {!isSuccess ? (
+                            <>
+                                <Row className="my-2">
+                                    <Col>
+                                        <Form.Label>Số điện thoại</Form.Label>
+                                        <Form.Control
+                                            type="tel"
+                                            placeholder="Nhập số điện thoại"
+                                            name="phoneNumber"
+                                            pattern="[0-9]{10}"
+                                            value={registerFormData.phoneNumber}
+                                            onChange={registerFormHandleChange}
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <Form.Label>Country</Form.Label>
+                                        <Form.Select
+                                            aria-label="Default select example"
+                                            onChange={registerFormHandleChange}
+                                            name="country"
+                                        >
+                                            <option>Select your country</option>
+                                            <option value="Việt Nam">
+                                                Việt Nam
+                                            </option>
+                                            <option value="Other">Other</option>
+                                        </Form.Select>
+                                    </Col>
+                                </Row>
+                                <Row className="my-2">
+                                    <Col>
+                                        <Form.Label>Tên tài khoản</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Nhập tên tài khoản"
+                                            name="userName"
+                                            value={registerFormData.userName}
+                                            onChange={registerFormHandleChange}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="my-2">
+                                    <Col>
+                                        <Form.Label>Mật khẩu</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Nhập mật khẩu"
+                                            name="password"
+                                            value={registerFormData.password}
+                                            onChange={registerFormHandleChange}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="my-2">
+                                    <Col>
+                                        <Form.Label>
+                                            Xác nhận mật khẩu
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Nhập lại mật khẩu"
+                                            name="reenterPassword"
+                                            value={reenterPassword}
+                                            onChange={(e) =>
+                                                setReenterPassword(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </Col>
+                                </Row>
+                            </>
+                        ) : (
+                            <></>
+                        )}
+
                         <Row className="my-2">
                             <Col className="text-center">
                                 <Button

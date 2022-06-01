@@ -50,11 +50,14 @@ export const signup = (userData, setIsSuccess) => async (dispatch) => {
     try {
         const { data } = await api.signup(userData);
         setIsSuccess(true);
+
         localStorage.setItem("authToken", data.token);
+        
+        dispatch({ type: CLR_ER_MESSAGE, payload: null });
         dispatch({ type: SIGN_UP, payload: data });
     } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message.message);
+        console.log(error.response.data);
+        dispatch({ type: SET_ER_MESSAGE, payload: error.response.data });
     }
 };
 

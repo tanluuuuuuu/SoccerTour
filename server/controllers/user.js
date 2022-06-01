@@ -2,7 +2,6 @@ import { userModel, teamModel } from "../models/tourModel.js";
 import _ from "lodash";
 import jwt from "jsonwebtoken";
 
-
 export const getUserList = async (req, res) => {
     try {
         const allUser = await userModel.find();
@@ -52,8 +51,8 @@ export const signin = async (req, res) => {
             .select("+password");
 
         if (!user) {
-            console.log("Invalid Credentials");
-            return res.status(401).send("Invalid Credentials");
+            console.log("Người dùng không tồn tại");
+            return res.status(401).send("Người dùng không tồn tại");
         }
 
         const isMatch = await user.matchPassword(password);
@@ -78,6 +77,12 @@ export const signin = async (req, res) => {
 export const signup = async (req, res, next) => {
     try {
         const { phoneNumber, country, userName, password } = req.body;
+
+        if (userModel.find({ username: userName })) {
+            console.log("User already exist");
+            return res.status(409).send("User already exist");
+        }
+
         const registeredUser = await userModel.create({
             phoneNumber,
             username: userName,
