@@ -28,17 +28,17 @@ const RegisterListComponent = () => {
             isAcceptingRegister ||
             allTeamInTour.some((teamInTour) => teamInTour._id === team._id)
         ) {
-            await dispatch(acceptRegister(team._id));
+            await dispatch(acceptRegister(team));
             await dispatch(getRanking());
             await dispatch(getRankingPlayer());
             alert("Cập nhật thành công");
         } else {
-            alert("Giải đấu đã bắt đầu không thể thêm đơn đăng ký");
+            
         }
     };
 
     const onDelete = async (team) => {
-        await dispatch(deleteRegister(team._id))
+        await dispatch(deleteRegister(team))
         console.log(registerList);
     };
 
@@ -52,7 +52,7 @@ const RegisterListComponent = () => {
             <h3 className="bg-danger text-center text-white">
                 Danh sách đơn đăng ký
             </h3>
-            {registerList.map((team, index) => (
+            {registerList?.map((team, index) => (
                 <Card className="my-2">
                     <Card.Header as="h5"></Card.Header>
                     <Card.Body>
@@ -118,7 +118,7 @@ const RegisterListComponent = () => {
                             <b>{`Tuổi`}</b>
                         </Col>
                     </Row>
-                    {selectedTeam?.playerList.map((player, index) => (
+                    {selectedTeam?.playerList?.map((player, index) => (
                         <Row key={player?.playerName} className="text-center">
                             <Col xs={1}>{index + 1}</Col>
                             <Col>{`${player?.playerName}`}</Col>

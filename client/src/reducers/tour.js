@@ -17,8 +17,8 @@ const tour = (tour = {}, action) => {
     console.log(action.type);
     switch (action.type) {
         case CREATE_TEAM:
-            console.log("Saved team in reducer");
-            return { ...tour };
+            console.log("Saved team in register list in reducer");
+            return { ...tour, registerList: action.payload};
         case CREATE_TOUR:
             console.log("Saved tour in reducer");
             return action.payload;
@@ -78,7 +78,7 @@ const tour = (tour = {}, action) => {
         case ACCEPT_REGISTER:
             return { ...tour, ...action.payload };
         case DELETE_REGISTER:
-            return { ...tour, ...action.payload };
+            return { ...tour, registerList: action.payload};
         default:
             return tour;
     }

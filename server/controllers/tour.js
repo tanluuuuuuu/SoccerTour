@@ -5,6 +5,7 @@ import {
     matchModel,
     matchResultModel,
     goalModel,
+    userModel,
 } from "../models/tourModel.js";
 import mongoose from "mongoose";
 import _ from "lodash";
@@ -117,32 +118,12 @@ export const createTeam = async (req, res, next) => {
         }
 
         // Get player Objects from Team data then save it
-        const listPlayer = [];
-        const listPlayerObject = [];
-        for (const player of team.playerList) {
-            player.teamName = team.teamName;
-            console.log("check");
-            const pl = await playerModel(player);
-            await pl.save();
-            listPlayer.push(pl._id.toString());
-            listPlayerObject.push(pl);
-        }
-        team.playerList = listPlayer;
-        console.log("Saved player successfully");
-
-        // Create Team from team data and save it
-        const newTeam = await teamModel(team);
-        await newTeam.save();
-        console.log("Saved team successfully");
-
-        tour.registerList.push(newTeam._id);
+        team.userId = user._id;
+        tour.registerList.push(team);
         await tour.save();
         console.log("Register sent to tour successfully");
 
-        newTeam.playerList = listPlayerObject;
-        user.team = newTeam._id;
-        await user.save();
-        res.status(200).json(newTeam);
+        res.status(200).json(tour.registerList);
     } catch (er) {
         return res.status(500).send(er.message);
     }
@@ -295,15 +276,15 @@ export const getTour = async (req, res) => {
                         ],
                     },
                 ],
-            })
-            .populate({
-                path: "registerList",
-                model: "teamModel",
-                populate: {
-                    path: "playerList",
-                    model: "playerModel",
-                },
             });
+        // .populate({
+        //     path: "registerList",
+        //     model: "teamModel",
+        //     populate: {
+        //         path: "playerList",
+        //         model: "playerModel",
+        //     },
+        // });
         console.log("Get tour successfully");
         res.status(200).json(tour);
     } catch (error) {
@@ -872,23 +853,58 @@ export const changeTourRule = async (req, res) => {
 
 export const acceptRegister = async (req, res, next) => {
     try {
-        const { teamId } = req.body;
+        const registration = req.body;
+        const user = await userModel.findById(registration.userId);
         const tour = await TourModel.findOne();
-        const team = await teamModel.findById(teamId).populate({
-            path: "playerList",
-            model: "playerModel",
-        });
-        tour.allTeams.push(team._id);
 
-        team.playerList.forEach((player) => {
-            tour.players.push(player._id);
-        });
+        const listPlayer = [];
+        for (const player of registration.playerList) {
+            player.teamName = registration.teamName;
+            if (player._id) {
+                await playerModel.findByIdAndUpdate(player._id, player);
+                listPlayer.push(player._id);
+            } else {
+                const pl = await playerModel(player);
+                await pl.save();
+                listPlayer.push(pl._id);
+                tour.players.push(pl._id);
+            }
+        }
+        registration.playerList = listPlayer;
+        console.log("Saved player successfully");
 
-        _.remove(tour.registerList, (teamRegiter) => {
-            return teamRegiter._id.equals(team._id);
-        });
+        // Create Team from team data and save it
+        delete registration["userId"];
+        if (registration._id) {
+            await teamModel.findByIdAndUpdate(registration._id, registration);
+            console.log("Update team successfully");
 
-        await TourModel.findByIdAndUpdate(tour._id, tour);
+            _.remove(tour.registerList, (registration) => {
+                return registration.userId.equals(user._id);
+            });
+
+            await TourModel.findByIdAndUpdate(tour._id, tour);
+        } else {
+            const newTeam = await teamModel(registration);
+            await newTeam.save();
+            console.log("Saved team successfully");
+
+            // newTeam.playerList.forEach((playerId) => {
+            //     tour.players.push(playerId);
+            // });
+
+            tour.allTeams.push(newTeam._id);
+
+            _.remove(tour.registerList, (registration) => {
+                return registration.userId.equals(user._id);
+            });
+
+            await TourModel.findByIdAndUpdate(tour._id, tour);
+
+            user.team = newTeam._id;
+            await user.save();
+        }
+
         console.log("Team accepted successfully");
         next();
     } catch (error) {
@@ -898,16 +914,17 @@ export const acceptRegister = async (req, res, next) => {
 
 export const deleteRegister = async (req, res, next) => {
     try {
-        const { teamId } = req.body;
+        const registration = req.body;
         const tour = await TourModel.findOne();
 
         _.remove(tour.registerList, (teamRegiter) => {
-            return teamRegiter._id.equals(mongoose.Types.ObjectId(teamId));
+            return teamRegiter.userId.toString() === registration.userId;
         });
 
         await TourModel.findByIdAndUpdate(tour._id, tour);
         console.log("Register delete successfully");
-        next();
+
+        res.status(200).json(tour.registerList);
     } catch (error) {
         res.status(404).send(error.message);
     }

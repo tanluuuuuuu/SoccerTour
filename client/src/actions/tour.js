@@ -86,9 +86,9 @@ export const changeTourRule = (tourData) => async (dispatch) => {
     }
 };
 
-export const acceptRegister = (teamId) => async (dispatch) => {
+export const acceptRegister = (team) => async (dispatch) => {
     try {
-        const { data } = await api.acceptRegister({teamId});
+        const { data } = await api.acceptRegister(team);
 
         dispatch({ type: ACCEPT_REGISTER, payload: data });
     } catch (error) {
@@ -96,9 +96,9 @@ export const acceptRegister = (teamId) => async (dispatch) => {
     }
 }
 
-export const deleteRegister = (teamId) => async (dispatch) => {
+export const deleteRegister = (team) => async (dispatch) => {
     try {
-        const { data } = await api.deleteRegister({teamId});
+        const { data } = await api.deleteRegister(team);
 
         dispatch({ type: DELETE_REGISTER, payload: data });
     } catch (error) {

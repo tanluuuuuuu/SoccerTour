@@ -32,11 +32,6 @@ const initializeTeamData = {
 function CreateTeamComponent() {
     const dispatch = useDispatch();
     const tour = useSelector((state) => state.tour);
-    const isOpenForRegister = useSelector(
-        (state) => state.tour.isAcceptingRegister
-    );
-    const [loading, setLoading] = useState(false);
-
     const user = useSelector((state) => state.user);
     const userTeam = useSelector((state) => {
         let searchTeam = state.tour.allTeams.find(
@@ -49,6 +44,15 @@ function CreateTeamComponent() {
         }
         return searchTeam;
     });
+    const isOpenForRegister = useSelector(
+        (state) => state.tour.isAcceptingRegister
+    );
+    const registerList = useSelector((state) => state.tour.registerList);
+    const userRegister = registerList?.find(
+        (registration) => registration.userId.toString() === user._id
+    );
+
+    const [loading, setLoading] = useState(false);
 
     const isInitialMount = useRef(true);
     const erMessage = useSelector((state) => state.erMessage);
@@ -151,6 +155,14 @@ function CreateTeamComponent() {
         );
     };
 
+    const converDayOfBirth = (s) => {
+        // input: 2005-05-29T00:00:00.000Z
+        const year = s.split("-")[0]
+        const month = s.split("-")[1]
+        const day = s.split("-")[2].split("T")[0]
+        return `${year}-${month}-${day}`
+    }
+
     return (
         <Container className="mt-5">
             <Modal show={show} onHide={handleClose}>
@@ -226,7 +238,7 @@ function CreateTeamComponent() {
                     </Col>
                 </Row>
 
-                {teamData.playerList.map((player, index) => {
+                {teamData?.playerList?.map((player, index) => {
                     return (
                         <Row key={index}>
                             <Col sm={1}>
@@ -321,7 +333,7 @@ function CreateTeamComponent() {
                         onClick={() => {
                             addPlayerData();
                         }}
-                        disabled={!isOpenForRegister && !user.team}
+                        disabled={!isOpenForRegister && !user.team && !loading}
                     >
                         +
                     </Button>
@@ -330,7 +342,7 @@ function CreateTeamComponent() {
                     <Button
                         variant="danger"
                         type="submit"
-                        disabled={!isOpenForRegister && !user.team}
+                        disabled={!isOpenForRegister && !user.team && !loading}
                     >
                         {isOpenForRegister ? "Đăng ký" : "Cập nhật đội bóng"}
                     </Button>
@@ -339,6 +351,34 @@ function CreateTeamComponent() {
             <div className="text-center">
                 {loading ? <Spinner animation="border" /> : <></>}
             </div>
+
+            {userRegister ? (
+                <>
+                    <h3 className="text-center bg-danger text-white">
+                        Danh sách đơn đăng ký của bạn
+                    </h3>
+                    <Row>
+                        <Col>Tên đội: {userRegister.teamName}</Col>
+                        <Col>Sân nhà: {userRegister.homeGround}</Col>
+                    </Row>
+                    <Row className="text-center">
+                        <Col><b>Tên cầu thủ</b></Col>
+                        <Col><b>Ngày sinh</b></Col>
+                        <Col><b>Loại cầu thủ</b></Col>
+                        <Col><b>Quốc tịch</b></Col>
+                    </Row>
+                    {userRegister.playerList.map((player) => (
+                        <Row className="text-center">
+                            <Col>{player.playerName}</Col>
+                            <Col>{converDayOfBirth(player.dayOfBirth)}</Col>
+                            <Col>{player.playerType}</Col>
+                            <Col>{player.nationality}</Col>
+                        </Row>
+                    ))}
+                </>
+            ) : (
+                <></>
+            )}
         </Container>
     );
 }

@@ -38,7 +38,7 @@ const TourReport = () => {
                         <b>Điểm số</b>
                     </Col>
                 </Row>
-                {tour.ranking.map((team, index) => (
+                {tour?.ranking?.map((team, index) => (
                     <Card className="mt-2" key={team.teamName}>
                         <Card.Body className="text-center">
                             <Row>
@@ -83,7 +83,7 @@ const TourReport = () => {
                         <b>Kiến tạo</b>
                     </Col>
                 </Row>
-                {tour.rankingPlayer.map((player, index) => (
+                {tour?.rankingPlayer?.map((player, index) => (
                     <Card className="mt-2" key={player.playerName}>
                         <Card.Body className="text-center">
                             <Row>
@@ -108,7 +108,7 @@ const TourReport = () => {
                     Danh sách trận đấu {wayName}
                 </h3>
                 {matchList?.map((round) =>
-                    round.matches.map((match) => (
+                    round?.matches?.map((match) => (
                         <Card className="mt-2" key={match?._id}>
                             <Card.Body>
                                 <Row>
@@ -181,7 +181,7 @@ const TourReport = () => {
                                                 <b>Ghi chú</b>
                                             </Col>
                                         </Row>
-                                        {match.playerAttending.team1.map(
+                                        {match?.playerAttending?.team1?.map(
                                             (player) => (
                                                 <Row className="text-center">
                                                     <Col>
@@ -213,7 +213,7 @@ const TourReport = () => {
                                                 <b>Ghi chú</b>
                                             </Col>
                                         </Row>
-                                        {match.playerAttending.team2.map(
+                                        {match?.playerAttending?.team2?.map(
                                             (player) => (
                                                 <Row className="text-center">
                                                     <Col>
@@ -250,7 +250,7 @@ const TourReport = () => {
                                                 <b>Thời điểm</b>
                                             </Col>
                                         </Row>
-                                        {match.result.team1Result.goals.map(
+                                        {match?.result?.team1Result?.goals?.map(
                                             (goal) => (
                                                 <Row>
                                                     <Col>
@@ -283,7 +283,7 @@ const TourReport = () => {
                                                 <b>Thời điểm</b>
                                             </Col>
                                         </Row>
-                                        {match.result.team2Result.goals.map(
+                                        {match?.result?.team2Result?.goals?.map(
                                             (goal) => (
                                                 <Row>
                                                     <Col>

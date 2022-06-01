@@ -31,7 +31,7 @@ router.get("/ranking", getRank);
 router.get("/rankingPlayer", getRankPlayer);
 router.patch("/rule", AdminProtection, changeTourRule);
 router.post("/acceptregister", AdminProtection, acceptRegister, getTour);
-router.post("/deleteregister", AdminProtection, deleteRegister, getTour);
+router.post("/deleteregister", AdminProtection, deleteRegister);
 router.get("/team/:teamId", fetchOneTeam)
 
 export default router;

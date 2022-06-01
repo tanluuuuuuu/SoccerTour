@@ -30,7 +30,7 @@ const UserListComponent = () => {
             <h3 className="text-center bg-danger text-white">
                 Danh sách người dùng
             </h3>
-            {userList.map((user) => (
+            {userList?.map((user) => (
                 <Card className="my-3">
                     <Card.Header as="h5">{user.role}</Card.Header>
                     <Card.Body>

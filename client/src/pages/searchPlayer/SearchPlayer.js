@@ -116,7 +116,7 @@ function SearchPlayerComponent() {
             </Form>
 
             {/* Display player */}
-            {playerfilted.map((player) => {
+            {playerfilted?.map((player) => {
                 return (
                     <Card className="mt-2">
                         <Card.Body>

@@ -175,7 +175,7 @@ const TourSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    registerList: [{ type: mongoose.Types.ObjectId, ref: "teamModel" }],
+    registerList: [],
 });
 
 const seasonSchema = mongoose.Schema({

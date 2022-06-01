@@ -291,7 +291,7 @@ function CalendarComponent() {
                                     : "Lượt về"}
                             </h3>
                         }
-                        {tour.calendar[homeOrAway].map((round, index) => {
+                        {tour?.calendar[homeOrAway]?.map((round, index) => {
                             return (
                                 <div key={index}>
                                     <h4 className="text-center mt-3">{`Round ${round.round}`}</h4>
@@ -315,7 +315,7 @@ function CalendarComponent() {
                                             ></Col>
                                         </Row>
                                     ) : null}
-                                    {round.matches.map((match) => {
+                                    {round?.matches?.map((match) => {
                                         return (
                                             <MatchRow
                                                 key={match._id}
@@ -464,7 +464,7 @@ function CalendarComponent() {
                             {["team1", "team2"].map((team) => {
                                 return (
                                     <Col>
-                                        {selectedMatch[team].playerList.map(
+                                        {selectedMatch[team]?.playerList?.map(
                                             (player, index) => {
                                                 return (
                                                     <Form.Check
@@ -606,7 +606,7 @@ function CalendarComponent() {
                             <Row>
                                 {["team1Result", "team2Result"].map((team) => (
                                     <Col key={team}>
-                                        {selectedMatchResult[team].goals.map(
+                                        {selectedMatchResult[team]?.goals?.map(
                                             (goal, index) => {
                                                 const teami =
                                                     team === "team1Result"
@@ -696,7 +696,7 @@ function CalendarComponent() {
                                                                 </option>
                                                                 {selectedMatch[
                                                                     teami
-                                                                ].playerList.map(
+                                                                ]?.playerList?.map(
                                                                     (
                                                                         player,
                                                                         index
@@ -782,7 +782,7 @@ function CalendarComponent() {
                                                                 </option>
                                                                 {selectedMatch[
                                                                     teami
-                                                                ].playerList.map(
+                                                                ]?.playerList?.map(
                                                                     (
                                                                         player,
                                                                         index

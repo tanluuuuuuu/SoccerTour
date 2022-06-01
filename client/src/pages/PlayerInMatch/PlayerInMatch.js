@@ -11,7 +11,7 @@ function PlayerInMatch() {
             <h3 className="text-center bg-danger text-white">
                 Lịch thi đấu từng đội
             </h3>
-            {allTeams.map((team) => (
+            {allTeams?.map((team) => (
                 <div className="text-center mt-3">
                     <h4 className="text-center">{team.teamName}</h4>
                     <Row>
@@ -19,7 +19,7 @@ function PlayerInMatch() {
                         <Col><b>Đội 2</b></Col>
                         <Col><b>Sân</b></Col>
                     </Row>
-                    {calendar.awayMatches.map((round) => {
+                    {calendar?.awayMatches?.map((round) => {
                         for (const match of round.matches) {
                             if (
                                 match.team1._id === team._id ||
