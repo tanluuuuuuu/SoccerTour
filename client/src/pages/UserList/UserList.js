@@ -3,8 +3,9 @@ import { Container, Card, Button, Modal, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserList } from "../../actions/user.js";
 import { fetchOneTeam } from "../../actions/teams.js";
+import MotionHoc from "../../components/MotionHoc.js";
 
-const UserList = () => {
+const UserListComponent = () => {
     const dispatch = useDispatch();
     const userList = useSelector((state) => state.userList);
     const team = useSelector((state) => state.team);
@@ -86,5 +87,7 @@ const UserList = () => {
         </Container>
     );
 };
+
+const UserList = MotionHoc(UserListComponent)
 
 export default UserList;

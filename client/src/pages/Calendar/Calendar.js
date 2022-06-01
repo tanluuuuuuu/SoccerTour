@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateCalendar } from "../../actions/tour.js";
 import { updateMatch, updateMatchResult } from "../../actions/match.js";
 import MatchRow from "../../components/MatchRow.js";
+import MotionHoc from "../../components/MotionHoc.js";
 
 const initializeMatchData = {
     team1: {
@@ -68,7 +69,7 @@ const initializeMatchResult = {
     },
 };
 
-function Calendar() {
+function CalendarComponent() {
     const dispatch = useDispatch();
     const erMessage = useSelector((state) => state.erMessage);
 
@@ -881,5 +882,7 @@ function Calendar() {
         </Container>
     );
 }
+
+const Calendar = MotionHoc(CalendarComponent);
 
 export default Calendar;

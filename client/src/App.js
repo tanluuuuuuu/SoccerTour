@@ -19,6 +19,7 @@ import { fetchTour, getRanking, getRankingPlayer } from "./actions/tour.js";
 import { checkSignIn } from "./actions/user.js";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useSelector } from "react-redux";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
     const dispatch = useDispatch();
@@ -42,55 +43,69 @@ function App() {
             <GlobalStyle />
             <Router>
                 {user.isLogin ? <Sidebar /> : <></>}
-                <Switch>
-                    <Route exact path="/">
-                        <HomeTour isLoading={loadingData} />
-                    </Route>
-                    <ProtectedRoute
-                        exact
-                        isLogin={user.isLogin}
-                        path="/newteam"
-                    >
-                        <CreateTeam />
-                    </ProtectedRoute>
-                    <ProtectedRoute
-                        exact
-                        isLogin={user.isLogin}
-                        path="/calendar"
-                    >
-                        <Calendar />
-                    </ProtectedRoute>
-                    <ProtectedRoute exact isLogin={user.isLogin} path="/search">
-                        <SearchPlayer />
-                    </ProtectedRoute>
-                    <ProtectedRoute exact isLogin={user.isLogin} path="/rule">
-                        <TourRule />
-                    </ProtectedRoute>
-                    <ProtectedRoute exact isLogin={user.isLogin} path="/user">
-                        <User />
-                    </ProtectedRoute>
-                    <ProtectedRoute
-                        exact
-                        isLogin={user.isLogin}
-                        path="/userlist"
-                    >
-                        <UserList />
-                    </ProtectedRoute>
-                    <ProtectedRoute
-                        exact
-                        isLogin={user.isLogin}
-                        path="/registerlist"
-                    >
-                        <RegisterList />
-                    </ProtectedRoute>
-                    <ProtectedRoute
-                        exact
-                        isLogin={user.isLogin}
-                        path="/teamcalendar"
-                    >
-                        <TeamCalendar />
-                    </ProtectedRoute>
-                </Switch>
+                <AnimatePresence>
+                    <Switch>
+                        <Route exact path="/">
+                            <HomeTour isLoading={loadingData} />
+                        </Route>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/newteam"
+                        >
+                            <CreateTeam />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/calendar"
+                        >
+                            <Calendar />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/search"
+                        >
+                            <SearchPlayer />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/rule"
+                        >
+                            <TourRule />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/user"
+                        >
+                            <User />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/userlist"
+                        >
+                            <UserList />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/registerlist"
+                        >
+                            <RegisterList />
+                        </ProtectedRoute>
+                        <ProtectedRoute
+                            exact
+                            isLogin={user.isLogin}
+                            path="/teamcalendar"
+                        >
+                            <TeamCalendar />
+                        </ProtectedRoute>
+                    </Switch>
+                </AnimatePresence>
             </Router>
         </div>
     );

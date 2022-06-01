@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { createTeam } from "../../actions/tour.js";
+import MotionHoc from "../../components/MotionHoc.js";
 
 const initializeTeamData = {
     teamName: "",
@@ -28,7 +29,7 @@ const initializeTeamData = {
     ],
 };
 
-function CreateTeam() {
+function CreateTeamComponent() {
     const dispatch = useDispatch();
     const tour = useSelector((state) => state.tour);
     const isOpenForRegister = useSelector(
@@ -341,5 +342,7 @@ function CreateTeam() {
         </Container>
     );
 }
+
+const CreateTeam = MotionHoc(CreateTeamComponent);
 
 export default CreateTeam;

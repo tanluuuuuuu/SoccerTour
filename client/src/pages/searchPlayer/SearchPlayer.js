@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, Card, Spinner } from "react-bootstrap";
+import MotionHoc from "../../components/MotionHoc.js";
 
-function SearchPlayer() {
+function SearchPlayerComponent() {
     const players = useSelector((state) => state.tour.players);
 
     const [searchTerm, setSearchTerm] = useState({
@@ -138,5 +139,7 @@ function SearchPlayer() {
         </Container>
     );
 }
+
+const SearchPlayer = MotionHoc(SearchPlayerComponent)
 
 export default SearchPlayer;

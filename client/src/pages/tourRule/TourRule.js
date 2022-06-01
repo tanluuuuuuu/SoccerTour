@@ -11,8 +11,9 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { changeTourRule } from "../../actions/tour";
 import TourReport from "./TourReport/TourReport";
+import MotionHoc from "../../components/MotionHoc";
 
-function TourRule() {
+function TourRuleComponent() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [showTourReport, setShowTourReport] = useState(false);
@@ -243,5 +244,7 @@ function TourRule() {
         </Container>
     );
 }
+
+const TourRule = MotionHoc(TourRuleComponent)
 
 export default TourRule;

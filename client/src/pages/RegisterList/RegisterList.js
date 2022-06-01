@@ -8,8 +8,9 @@ import {
     getRankingPlayer,
     deleteRegister
 } from "../../actions/tour";
+import MotionHoc from "../../components/MotionHoc.js";
 
-const RegisterList = () => {
+const RegisterListComponent = () => {
     const dispatch = useDispatch();
     const registerList = useSelector((state) => state.tour.registerList);
     const isAcceptingRegister = useSelector(
@@ -134,5 +135,7 @@ const RegisterList = () => {
         </Container>
     );
 };
+
+const RegisterList = MotionHoc(RegisterListComponent)
 
 export default RegisterList;

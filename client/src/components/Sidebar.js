@@ -175,7 +175,7 @@ function Sidebar() {
                 </ListItem>
                 <ProfileContainer>
                     <Button variant="light" size="sm" onClick={handleLogout}>
-                        Logout
+                    <i class="fa-solid fa-power-off"></i>
                     </Button>
                 </ProfileContainer>
             </SidebarContainer>

@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import MotionHoc from "../../components/MotionHoc";
 
-const TeamCalendar = () => {
+const TeamCalendarComponent = () => {
     const awayMatches = useSelector(
         (state) => state.tour?.calendar?.awayMatches
     );
@@ -79,5 +80,7 @@ const TeamCalendar = () => {
         </Container>
     );
 };
+
+const TeamCalendar = MotionHoc(TeamCalendarComponent);
 
 export default TeamCalendar;

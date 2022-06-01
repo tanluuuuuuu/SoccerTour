@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 
 import { getRanking, getRankingPlayer } from "../../actions/tour.js";
 import { signin, signup } from "../../actions/user.js";
+import MotionHoc from "../../components/MotionHoc.js";
 
 const initializeRegisterFormData = {
     phoneNumber: "",
@@ -30,7 +31,7 @@ const initializeLoginFormData = {
     password: "",
 };
 
-function HomeTour({ isLoading }) {
+function HomeTourComponent({ isLoading }) {
     const dispatch = useDispatch();
 
     const tour = useSelector((state) => state.tour);
@@ -121,7 +122,7 @@ function HomeTour({ isLoading }) {
                         <b>Điểm số</b>
                     </Col>
                 </Row>
-                {tour.ranking.map((team) => (
+                {tour?.ranking?.map((team) => (
                     <Card className="mt-2" key={team.teamName}>
                         <Card.Body className="text-center">
                             <Row>
@@ -165,7 +166,7 @@ function HomeTour({ isLoading }) {
                         <b>Kiến tạo</b>
                     </Col>
                 </Row>
-                {tour.rankingPlayer.map((player) => (
+                {tour?.rankingPlayer?.map((player) => (
                     <Card className="mt-2" key={player.playerName}>
                         <Card.Body className="text-center">
                             <Row>
@@ -463,5 +464,7 @@ function HomeTour({ isLoading }) {
         </Container>
     );
 }
+
+const HomeTour = MotionHoc(HomeTourComponent);
 
 export default HomeTour;
