@@ -19,7 +19,6 @@ function TourRuleComponent() {
     const [showTourReport, setShowTourReport] = useState(false);
     const [showNewTourModal, setShowNewTourModal] = useState(false);
     const tour = useSelector((state) => state.tour);
-    console.log(tour);
 
     const initializeTourData = {
         tourName: tour.tourName,
@@ -60,7 +59,20 @@ function TourRuleComponent() {
     const onEndTour = async (e) => {
         e.preventDefault();
         await dispatch(endTour());
-        setTourData(initializeTourData)
+        setTourData({
+            tourName: "",
+            maxTeam: null,
+            minTeam: null,
+            maxPlayerOfTeam: null,
+            minPlayerOfTeam: null,
+            maxForeignPlayer: null,
+            maxAge: null,
+            minAge: null,
+            winPoint: 3,
+            drawPoint: 0,
+            losePoint: -1,
+            registerList: [],
+        });
         setShowNewTourModal(true);
     };
 
@@ -87,6 +99,7 @@ function TourRuleComponent() {
                     value={tourData.tourName}
                     name="tourName"
                     onChange={handleChange}
+                    placeholder={`Nhập tên giải đấu`}
                     required
                 />
                 <Row>
@@ -98,6 +111,7 @@ function TourRuleComponent() {
                             value={tourData.minTeam}
                             name="minTeam"
                             onChange={handleChange}
+                            placeholder={"Nhập số đội tối thiểu"}
                             required
                         />
                     </Col>
@@ -109,6 +123,7 @@ function TourRuleComponent() {
                             value={tourData.maxTeam}
                             name="maxTeam"
                             onChange={handleChange}
+                            placeholder={"Nhập số đội tối đa"}
                             required
                         />
                     </Col>
@@ -123,6 +138,7 @@ function TourRuleComponent() {
                             value={tourData.minPlayerOfTeam}
                             name="minPlayerOfTeam"
                             onChange={handleChange}
+                            placeholder={"Nhập số cầu thủ tối thiểu"}
                             required
                         />
                     </Col>
@@ -134,6 +150,7 @@ function TourRuleComponent() {
                             value={tourData.maxPlayerOfTeam}
                             name="maxPlayerOfTeam"
                             onChange={handleChange}
+                            placeholder={"Nhập số cầu thủ tối đa"}
                             required
                         />
                     </Col>
@@ -146,6 +163,7 @@ function TourRuleComponent() {
                     value={tourData.maxForeignPlayer}
                     name="maxForeignPlayer"
                     onChange={handleChange}
+                    placeholder={"Nhập số cầu thủ nước ngoài tối đa"}
                     required
                 />
 
@@ -158,6 +176,7 @@ function TourRuleComponent() {
                             value={tourData.minAge}
                             name="minAge"
                             onChange={handleChange}
+                            placeholder={"Nhập độ tuổi tối thiểu"}
                             required
                         />
                     </Col>
@@ -169,6 +188,7 @@ function TourRuleComponent() {
                             value={tourData.maxAge}
                             name="maxAge"
                             onChange={handleChange}
+                            placeholder={"Nhập độ tuổi tối đa"}
                             required
                         />
                     </Col>
@@ -182,6 +202,7 @@ function TourRuleComponent() {
                             value={tourData.winPoint}
                             name="winPoint"
                             onChange={handleChange}
+                            placeholder={"Nhập số điểm nhận được khi thắng"}
                             required
                         />
                     </Col>
@@ -193,6 +214,7 @@ function TourRuleComponent() {
                             value={tourData.drawPoint}
                             name="drawPoint"
                             onChange={handleChange}
+                            placeholder={"Nhập số điểm mỗi nhận được khi hòa"}
                             required
                         />
                     </Col>
@@ -204,6 +226,7 @@ function TourRuleComponent() {
                             value={tourData.losePoint}
                             name="losePoint"
                             onChange={handleChange}
+                            placeholder={"Nhập số điểm nhận được khi thua"}
                             required
                         />
                     </Col>
@@ -259,7 +282,7 @@ function TourRuleComponent() {
                     <TourReport />
                 </Modal.Body>
             </Modal>
-            <NewTourModal/>
+            <NewTourModal />
         </Container>
     );
 }
