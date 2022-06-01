@@ -48,7 +48,7 @@ function CreateTeamComponent() {
         (state) => state.tour.isAcceptingRegister
     );
     const registerList = useSelector((state) => state.tour.registerList);
-    const userRegister = registerList?.find(
+    const userRegister = registerList?.filter(
         (registration) => registration.userId.toString() === user._id
     );
 
@@ -157,11 +157,11 @@ function CreateTeamComponent() {
 
     const converDayOfBirth = (s) => {
         // input: 2005-05-29T00:00:00.000Z
-        const year = s.split("-")[0]
-        const month = s.split("-")[1]
-        const day = s.split("-")[2].split("T")[0]
-        return `${year}-${month}-${day}`
-    }
+        const year = s.split("-")[0];
+        const month = s.split("-")[1];
+        const day = s.split("-")[2].split("T")[0];
+        return `${year}-${month}-${day}`;
+    };
 
     return (
         <Container className="mt-5">
@@ -352,20 +352,33 @@ function CreateTeamComponent() {
                 {loading ? <Spinner animation="border" /> : <></>}
             </div>
 
-            {userRegister ? (
+            {userRegister.length > 0 ? (
+                <h3 className="text-center bg-danger text-white">
+                    Danh sách đơn đăng ký của bạn
+                </h3>
+            ) : (
+                <></>
+            )}
+
+            {userRegister?.map((userRegister) => (
                 <>
-                    <h3 className="text-center bg-danger text-white">
-                        Danh sách đơn đăng ký của bạn
-                    </h3>
                     <Row>
                         <Col>Tên đội: {userRegister.teamName}</Col>
                         <Col>Sân nhà: {userRegister.homeGround}</Col>
                     </Row>
                     <Row className="text-center">
-                        <Col><b>Tên cầu thủ</b></Col>
-                        <Col><b>Ngày sinh</b></Col>
-                        <Col><b>Loại cầu thủ</b></Col>
-                        <Col><b>Quốc tịch</b></Col>
+                        <Col>
+                            <b>Tên cầu thủ</b>
+                        </Col>
+                        <Col>
+                            <b>Ngày sinh</b>
+                        </Col>
+                        <Col>
+                            <b>Loại cầu thủ</b>
+                        </Col>
+                        <Col>
+                            <b>Quốc tịch</b>
+                        </Col>
                     </Row>
                     {userRegister.playerList.map((player) => (
                         <Row className="text-center">
@@ -376,9 +389,7 @@ function CreateTeamComponent() {
                         </Row>
                     ))}
                 </>
-            ) : (
-                <></>
-            )}
+            ))}
         </Container>
     );
 }
