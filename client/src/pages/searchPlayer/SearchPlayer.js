@@ -15,7 +15,7 @@ function SearchPlayerComponent() {
     const [playerfilted, setPlayerFilted] = useState(players);
 
     useEffect(() => {
-        if (players.length > 0) {
+        if (players?.length > 0) {
             const intervalId = setInterval(() => {
                 const arr = players.filter(
                     (player) =>

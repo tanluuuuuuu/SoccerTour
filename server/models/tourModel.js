@@ -176,6 +176,10 @@ const TourSchema = mongoose.Schema({
         default: 0,
     },
     registerList: [],
+    currentTour: {
+        type: Boolean,
+        default: true
+    } 
 });
 
 const seasonSchema = mongoose.Schema({

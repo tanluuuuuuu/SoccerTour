@@ -60,7 +60,7 @@ export const createTeam = async (req, res, next) => {
     try {
         const team = req.body;
         const user = req.user;
-        const tour = await TourModel.findOne();
+        const tour = await TourModel.findOne({ currentTour: true });
 
         // Validate
         if (tour.allTeams.length + 1 > tour.maxTeam)
@@ -135,7 +135,7 @@ export const createTour = async (req, res) => {
         const newTour = new TourModel(req.body);
         await newTour.save();
 
-        console.log("Create new calendar successfully");
+        console.log("Create new tour successfully");
         res.status(200).json(newTour);
     } catch (error) {
         res.status(404).json(error);
@@ -144,7 +144,7 @@ export const createTour = async (req, res) => {
 
 export const getTour = async (req, res) => {
     try {
-        const tour = await TourModel.findOne()
+        const tour = await TourModel.findOne({ currentTour: true })
             .populate({
                 path: "allTeams",
                 model: "teamModel",
@@ -295,7 +295,7 @@ export const getTour = async (req, res) => {
 
 // Create all matches
 export const updateTour = async (req, res) => {
-    const tour = await TourModel.findOne();
+    const tour = await TourModel.findOne({ currentTour: true });
     const data = req.body;
 
     if (data.allTeams.length <= tour.minTeam) {
@@ -591,7 +591,7 @@ export const updateMatchResult = async (req, res) => {
             return res.status(403).send("No match with that id");
 
         // Validate
-        const tour = await TourModel.findOne();
+        const tour = await TourModel.findOne({ currentTour: true });
         const sumTime = parseInt(
             matchResult.matchLength.minute * 60 + matchResult.matchLength.second
         );
@@ -797,7 +797,7 @@ export const getPlayers = async (req, res) => {
 
 export const getRank = async (req, res) => {
     try {
-        const tour = await TourModel.findOne().populate({
+        const tour = await TourModel.findOne({ currentTour: true }).populate({
             path: "allTeams",
             model: "teamModel",
         });
@@ -811,7 +811,7 @@ export const getRank = async (req, res) => {
 
 export const getRankPlayer = async (req, res) => {
     try {
-        const tour = await TourModel.findOne().populate({
+        const tour = await TourModel.findOne({ currentTour: true }).populate({
             path: "players",
             model: "playerModel",
         });
@@ -825,7 +825,7 @@ export const getRankPlayer = async (req, res) => {
 
 export const changeTourRule = async (req, res) => {
     try {
-        const tour = await TourModel.findOne();
+        const tour = await TourModel.findOne({ currentTour: true });
         const newTourChange = req.body;
 
         const initializeTourData = {
@@ -855,7 +855,7 @@ export const acceptRegister = async (req, res, next) => {
     try {
         const registration = req.body;
         const user = await userModel.findById(registration.userId);
-        const tour = await TourModel.findOne();
+        const tour = await TourModel.findOne({ currentTour: true });
 
         const listPlayer = [];
         for (const player of registration.playerList) {
@@ -915,7 +915,7 @@ export const acceptRegister = async (req, res, next) => {
 export const deleteRegister = async (req, res, next) => {
     try {
         const registration = req.body;
-        const tour = await TourModel.findOne();
+        const tour = await TourModel.findOne({ currentTour: true });
 
         _.remove(tour.registerList, (teamRegiter) => {
             return teamRegiter.userId.toString() === registration.userId;
@@ -925,6 +925,51 @@ export const deleteRegister = async (req, res, next) => {
         console.log("Register delete successfully");
 
         res.status(200).json(tour.registerList);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};
+
+export const endTour = async (req, res) => {
+    try {
+        const tour = await TourModel.findOne({ currentTour: true });
+        tour.currentTour = false;
+        await tour.save();
+
+        const newTour = await TourModel.create({
+            allTeams: [], // Tất cả các đội
+            players: [], // Tất cả các cầu thủ
+            calendar: {
+                // Lịch thi đấu
+                awayMatches: [
+                    // Lượt đi chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
+                    
+                ],
+                homeMatches: [
+                    // Lượt về chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
+                    
+                ],
+            },
+            tourName: "",
+            maxTeam: 0,
+            minTeam: 0,
+            maxPlayerOfTeam: 0,
+            minPlayerOfTeam: 0,
+            maxForeignPlayer: 0,
+            maxAge: 0,
+            minAge: 0,
+            isAcceptingRegister: true,
+            isClosed: false,
+            dateStart: null,
+            dateEnd: null,
+            winPoint: 3,
+            drawPoint: 1,
+            losePoint: 0,
+            registerList: [],
+            currentTour: true,
+        });
+        console.log("Create new tour successfully");
+        res.status(200).json(newTour);
     } catch (error) {
         res.status(404).send(error.message);
     }

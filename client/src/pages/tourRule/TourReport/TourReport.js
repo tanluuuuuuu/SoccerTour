@@ -7,8 +7,6 @@ const TourReport = () => {
     const awayMatches = tour?.calendar?.awayMatches;
     const homeMatches = tour?.calendar?.homeMatches;
 
-    console.log(awayMatches);
-
     const Ranking = () => {
         return (
             <Container className="mt-3">

@@ -11,6 +11,7 @@ import {
     CHANGE_TOUR_RULE,
     ACCEPT_REGISTER,
     DELETE_REGISTER,
+    END_TOUR,
 } from "../constants/actionTypes.js";
 
 const tour = (tour = {}, action) => {
@@ -18,7 +19,7 @@ const tour = (tour = {}, action) => {
     switch (action.type) {
         case CREATE_TEAM:
             console.log("Saved team in register list in reducer");
-            return { ...tour, registerList: action.payload};
+            return { ...tour, registerList: action.payload };
         case CREATE_TOUR:
             console.log("Saved tour in reducer");
             return action.payload;
@@ -78,7 +79,9 @@ const tour = (tour = {}, action) => {
         case ACCEPT_REGISTER:
             return { ...tour, ...action.payload };
         case DELETE_REGISTER:
-            return { ...tour, registerList: action.payload};
+            return { ...tour, registerList: action.payload };
+        case END_TOUR:
+            return action.payload;
         default:
             return tour;
     }

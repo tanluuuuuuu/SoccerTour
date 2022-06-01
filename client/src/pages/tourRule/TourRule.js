@@ -9,7 +9,7 @@ import {
     Modal,
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { changeTourRule } from "../../actions/tour";
+import { changeTourRule, endTour } from "../../actions/tour";
 import TourReport from "./TourReport/TourReport";
 import MotionHoc from "../../components/MotionHoc";
 
@@ -17,7 +17,9 @@ function TourRuleComponent() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [showTourReport, setShowTourReport] = useState(false);
+    const [showNewTourModal, setShowNewTourModal] = useState(false);
     const tour = useSelector((state) => state.tour);
+    console.log(tour);
 
     const initializeTourData = {
         tourName: tour.tourName,
@@ -55,7 +57,23 @@ function TourRuleComponent() {
         setShowTourReport(true);
     };
 
-    const endTour = () => {};
+    const onEndTour = async (e) => {
+        e.preventDefault();
+        await dispatch(endTour());
+        setTourData(initializeTourData)
+        setShowNewTourModal(true);
+    };
+
+    const NewTourModal = () => (
+        <Modal
+            show={showNewTourModal}
+            onHide={() => setShowNewTourModal(false)}
+        >
+            <Modal.Body>
+                Giải đấu mới tạo thành công, vui lòng cập nhật các thông số
+            </Modal.Body>
+        </Modal>
+    );
 
     return (
         <Container className="mt-5">
@@ -223,7 +241,7 @@ function TourRuleComponent() {
                     variant="secondary"
                     type="button"
                     className="float-right mt-2 mx-2"
-                    onClick={endTour}
+                    onClick={(e) => onEndTour(e)}
                 >
                     Kết thúc giải đấu
                 </Button>
@@ -241,10 +259,11 @@ function TourRuleComponent() {
                     <TourReport />
                 </Modal.Body>
             </Modal>
+            <NewTourModal/>
         </Container>
     );
 }
 
-const TourRule = MotionHoc(TourRuleComponent)
+const TourRule = MotionHoc(TourRuleComponent);
 
 export default TourRule;

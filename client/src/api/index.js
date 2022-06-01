@@ -93,3 +93,15 @@ export const changeTourRule = (tourData) =>
             authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
     });
+
+export const endTour = () =>
+    axios.post(
+        `${url}/endtour`,
+        {},
+        {
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+        }
+    );
