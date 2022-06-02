@@ -78,7 +78,8 @@ export const signup = async (req, res, next) => {
     try {
         const { phoneNumber, country, userName, password } = req.body;
 
-        if (userModel.find({ username: userName })) {
+        const checkUserExist = await userModel.findOne({ username: userName })
+        if (checkUserExist) {
             console.log("User already exist");
             return res.status(409).send("User already exist");
         }
