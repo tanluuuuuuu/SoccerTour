@@ -37,6 +37,7 @@ function HomeTourComponent({ isLoading }) {
     const tour = useSelector((state) => state.tour);
     const awayMatches = tour?.calendar?.awayMatches;
     const homeMatches = tour?.calendar?.homeMatches;
+    const allTeams = tour?.allTeams;
 
     const user = useSelector((state) => state.user);
     const [showLoginForm, setShowLoginForm] = useState(false);
@@ -91,6 +92,39 @@ function HomeTourComponent({ isLoading }) {
         } else {
             alert("Please confirm password");
         }
+    };
+
+    const TeamList = () => {
+        return (
+            <Container className="mt-3 p-0">
+                {allTeams?.map((team) => {
+                    return (
+                        <Card className="mt-2">
+                            <Card.Header
+                                as="h5"
+                                className="bg-danger text-center text-white"
+                            >
+                                {team.teamName}
+                            </Card.Header>
+                            <Card.Body>
+                                {team?.playerList?.map((player) => {
+                                    return (
+                                        <Card className="mt-2">
+                                            <Card.Body>
+                                                <Row className="text-center">
+                                                    <Col>{player.playerName}</Col>
+                                                    <Col>{player.playerType}</Col>
+                                                </Row>
+                                            </Card.Body>
+                                        </Card>
+                                    );
+                                })}
+                            </Card.Body>
+                        </Card>
+                    );
+                })}
+            </Container>
+        );
     };
 
     const Ranking = () => {
@@ -237,6 +271,7 @@ function HomeTourComponent({ isLoading }) {
                         </Row>
                     </Col>
                 </Row>
+                <TeamList />
             </Container>
         );
     };
