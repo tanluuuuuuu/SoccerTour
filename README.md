@@ -12,6 +12,6 @@ Because of economic condition, this website can not be deployed to the server. A
 
 2. Download or clone this repository
 
-3. Open folder client and folder server in terminal
+3. Open folder ```client``` and folder ```server``` in terminal
 
 4. Type command ```npm start``` in both termial.
