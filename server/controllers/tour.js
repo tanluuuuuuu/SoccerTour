@@ -298,7 +298,7 @@ export const updateTour = async (req, res) => {
     const tour = await TourModel.findOne({ currentTour: true });
     const data = req.body;
 
-    if (data.allTeams.length <= tour.minTeam) {
+    if (parseInt(data.allTeams.length ) < parseInt(tour.minTeam)) {
         return res.status(500).send("Không đủ số lượng đội yêu cầu của giải");
     }
 
