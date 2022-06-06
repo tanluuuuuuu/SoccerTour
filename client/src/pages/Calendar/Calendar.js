@@ -269,6 +269,17 @@ function CalendarComponent() {
                         >
                             Tạo lịch thi đấu và đóng form đăng ký đội
                         </Button>
+                        {showAlert ? (
+                        <Alert
+                            variant="warning"
+                            dismissible
+                            onClose={() => setShowAlert(false)}
+                        >
+                            {alertNotification}
+                        </Alert>
+                    ) : (
+                        <></>
+                    )}
                     </div>
 
                     <div>
