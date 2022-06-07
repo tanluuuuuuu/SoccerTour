@@ -238,7 +238,7 @@ function TourRuleComponent() {
                     className="float-right mt-2 mx-2"
                     onClick={onReset}
                 >
-                    Reset
+                    Đặt lại
                 </Button>
                 <Button type="submit" className="float-right mt-2">
                     {loading ? (
@@ -250,7 +250,7 @@ function TourRuleComponent() {
                     ) : (
                         <></>
                     )}
-                    Save
+                    Lưu
                 </Button>
                 <Button
                     variant="secondary"

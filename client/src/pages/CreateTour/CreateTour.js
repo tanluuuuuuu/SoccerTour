@@ -183,7 +183,7 @@ function TourRule() {
                     className="float-right mt-2 mx-2"
                     onClick={onReset}
                 >
-                    Reset
+                    Đặt lại
                 </Button>
                 <Button type="submit" className="float-right mt-2">
                     {loading ? (
