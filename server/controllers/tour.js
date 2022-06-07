@@ -285,6 +285,44 @@ export const getTour = async (req, res) => {
         //         model: "playerModel",
         //     },
         // });
+
+        if (!tour) {
+            const newTour = new TourModel({
+                allTeams: [], // Tất cả các đội
+                players: [], // Tất cả các cầu thủ
+                calendar: {
+                    // Lịch thi đấu
+                    awayMatches: [
+                        // Lượt đi chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
+                        
+                    ],
+                    homeMatches: [
+                        // Lượt về chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
+                        
+                    ],
+                },
+                tourName: "",
+                maxTeam: 10,
+                minTeam: 5,
+                maxPlayerOfTeam: 20,
+                minPlayerOfTeam: 10,
+                maxForeignPlayer: 5,
+                maxAge: 60,
+                minAge: 10,
+                isAcceptingRegister: true,
+                isClosed: false,
+                winPoint: 3,
+                drawPoint: 1,
+                losePoint: 0,
+                registerList: [],
+                currentTour: true,
+            });
+            await newTour.save();
+
+            console.log("Create new tour successfully");
+            return res.status(200).json(newTour);
+        }
+
         console.log("Get tour successfully");
         res.status(200).json(tour);
     } catch (error) {
@@ -298,7 +336,7 @@ export const updateTour = async (req, res) => {
     const tour = await TourModel.findOne({ currentTour: true });
     const data = req.body;
 
-    if (parseInt(data.allTeams.length ) < parseInt(tour.minTeam)) {
+    if (parseInt(data.allTeams.length) < parseInt(tour.minTeam)) {
         return res.status(500).send("Không đủ số lượng đội yêu cầu của giải");
     }
 
@@ -943,11 +981,9 @@ export const endTour = async (req, res) => {
                 // Lịch thi đấu
                 awayMatches: [
                     // Lượt đi chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
-                    
                 ],
                 homeMatches: [
                     // Lượt về chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
-                    
                 ],
             },
             tourName: "",
