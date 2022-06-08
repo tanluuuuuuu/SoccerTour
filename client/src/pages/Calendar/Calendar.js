@@ -270,16 +270,16 @@ function CalendarComponent() {
                             Tạo lịch thi đấu và đóng form đăng ký đội
                         </Button>
                         {showAlert ? (
-                        <Alert
-                            variant="warning"
-                            dismissible
-                            onClose={() => setShowAlert(false)}
-                        >
-                            {alertNotification}
-                        </Alert>
-                    ) : (
-                        <></>
-                    )}
+                            <Alert
+                                variant="warning"
+                                dismissible
+                                onClose={() => setShowAlert(false)}
+                            >
+                                {alertNotification}
+                            </Alert>
+                        ) : (
+                            <></>
+                        )}
                     </div>
 
                     <div>
@@ -305,7 +305,7 @@ function CalendarComponent() {
                         {tour?.calendar[homeOrAway]?.map((round, index) => {
                             return (
                                 <div key={index}>
-                                    <h4 className="text-center mt-3">{`Round ${round.round}`}</h4>
+                                    <h4 className="text-center mt-3">{`Vòng ${round.round}`}</h4>
                                     {index === 0 ? (
                                         <Row>
                                             <Col sm={1} className="text-center">
@@ -372,6 +372,17 @@ function CalendarComponent() {
                     <Modal.Title>Cập nhật thông tin trận đấu</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                {showAlert ? (
+                        <Alert
+                            variant="warning"
+                            dismissible
+                            onClose={() => setShowAlert(false)}
+                        >
+                            {alertNotification}
+                        </Alert>
+                    ) : (
+                        <></>
+                    )}
                     <Form>
                         <Row>
                             <Col>
@@ -510,10 +521,10 @@ function CalendarComponent() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onSaveMatchInfo}>
-                        Save
+                        Lưu
                     </Button>
                     <Button variant="danger" onClick={handleCloseMatchInfo}>
-                        Cancel
+                        Hủy
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -883,10 +894,10 @@ function CalendarComponent() {
                         ) : (
                             <></>
                         )}
-                        Save
+                        Lưu
                     </Button>
                     <Button variant="danger" onClick={handleCloseMatchResult}>
-                        Cancel
+                        Hủy
                     </Button>
                 </Modal.Footer>
             </Modal>

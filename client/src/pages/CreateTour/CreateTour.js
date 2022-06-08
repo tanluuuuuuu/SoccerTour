@@ -195,7 +195,7 @@ function TourRule() {
                     ) : (
                         <></>
                     )}
-                    Save
+                    Lưu
                 </Button>
                 <Button
                     variant="secondary"

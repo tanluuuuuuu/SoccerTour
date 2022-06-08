@@ -165,6 +165,9 @@ function CreateTeamComponent() {
 
     return (
         <Container className="mt-5">
+            <h3 className="bg-danger text-center text-white">
+                Đăng ký tham gia giải đấu
+            </h3>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalHeading}</Modal.Title>
@@ -177,9 +180,12 @@ function CreateTeamComponent() {
                 </Modal.Footer>
             </Modal>
             <TourRule />
-            <Button className="mb-2" onClick={() => setModalTourRule(true)}>
-                Xem quy định giải đấu
-            </Button>
+            <Container className="text-right">
+                <Button className="mb-2" onClick={() => setModalTourRule(true)}>
+                    Xem quy định giải đấu
+                </Button>
+            </Container>
+
             <Form onSubmit={handleSubmit}>
                 <Row>
                     <Col>
@@ -299,6 +305,26 @@ function CreateTeamComponent() {
                             </Col>
                             <Col sm={2}>
                                 <Form.Group className="mb-3">
+                                    <Form.Select
+                                        onChange={(e) =>
+                                            handlePlayerChange(index, e)
+                                        }
+                                        name="nationality"
+                                        value={player.nationality}
+                                        required
+                                    >
+                                        <option value={""}></option>
+                                        <option value={"Việt Nam"}>
+                                            Việt Nam
+                                        </option>
+                                        <option value={"Nước ngoài"}>
+                                            Nước ngoài
+                                        </option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            {/* <Col sm={2}>
+                                <Form.Group className="mb-3">
                                     <Form.Control
                                         type="text"
                                         value={player.nationality}
@@ -308,7 +334,7 @@ function CreateTeamComponent() {
                                         }
                                     />
                                 </Form.Group>
-                            </Col>
+                            </Col> */}
                             <Col
                                 sm={1}
                                 className="justify-content-center text-center"
@@ -354,7 +380,7 @@ function CreateTeamComponent() {
 
             {userRegister.length > 0 ? (
                 <h3 className="text-center bg-danger text-white">
-                    Danh sách đơn đăng ký của bạn
+                    Danh sách đơn đăng ký đang chờ duyệt của bạn
                 </h3>
             ) : (
                 <></>

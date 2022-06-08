@@ -107,13 +107,21 @@ function HomeTourComponent({ isLoading }) {
                                 {team.teamName}
                             </Card.Header>
                             <Card.Body>
+                                <Row className="text-center">
+                                    <Col><b>Tên cầu thủ</b></Col>
+                                    <Col><b>Loại cầu thủ</b></Col>
+                                </Row>
                                 {team?.playerList?.map((player) => {
                                     return (
                                         <Card className="mt-2">
                                             <Card.Body>
                                                 <Row className="text-center">
-                                                    <Col>{player.playerName}</Col>
-                                                    <Col>{player.playerType}</Col>
+                                                    <Col>
+                                                        {player.playerName}
+                                                    </Col>
+                                                    <Col>
+                                                        {player.playerType}
+                                                    </Col>
                                                 </Row>
                                             </Card.Body>
                                         </Card>

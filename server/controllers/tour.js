@@ -294,11 +294,9 @@ export const getTour = async (req, res) => {
                     // Lịch thi đấu
                     awayMatches: [
                         // Lượt đi chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
-                        
                     ],
                     homeMatches: [
                         // Lượt về chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
-                        
                     ],
                 },
                 tourName: "",
@@ -608,15 +606,44 @@ export const updateTour = async (req, res) => {
 export const updateMatchData = async (req, res) => {
     const { id: _id } = req.params;
     const match = JSON.parse(JSON.stringify(req.body));
+    const tour = await TourModel.findOne({ currentTour: true })
+        .populate({
+            path: "calendar.awayMatches.matches",
+            model: "matchModel",
+        })
+        .populate({
+            path: "calendar.homeMatches.matches",
+            model: "matchModel",
+        });
+
+    // Validate
     if (!mongoose.Types.ObjectId.isValid(_id))
         return res.status(500).send("No match with that id");
+
+    for (const round of tour.calendar.awayMatches) {
+        for (const roundMatch of round.matches) {
+            if (
+                roundMatch.team2._id == match.team1._id &&
+                roundMatch.team1._id == match.team2._id
+            ) {
+                if (roundMatch.date === match.date) {
+                    if (roundMatch.time === match.time) {
+                        return res.status(401).send(
+                            "Tồn tại 2 trận đấu cùng thời điểm của 2 đội"
+                        );
+                    }
+                }
+            }
+        }
+    }
+    //--------------------------------------------------------------------
     match.team1 = match.team1._id;
     match.team2 = match.team2._id;
     const updatedMatch = await matchModel.findByIdAndUpdate(_id, match, {
         new: true,
     });
     console.log("Update match successfully");
-    res.json(req.body);
+    res.status(200).json(req.body);
 };
 
 export const updateMatchResult = async (req, res) => {
