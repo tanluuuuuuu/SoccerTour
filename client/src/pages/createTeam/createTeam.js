@@ -42,8 +42,19 @@ function CreateTeamComponent() {
                 (team) => team._id === user.team
             );
         }
+        console.log(searchTeam);
         return searchTeam;
     });
+    const formatDate = (date) => {
+        var d = new Date(date),
+            month = "" + (d.getMonth() + 1),
+            day = "" + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+        return [year, month, day].join("-");
+    };
     const isOpenForRegister = useSelector(
         (state) => state.tour.isAcceptingRegister
     );
@@ -153,14 +164,6 @@ function CreateTeamComponent() {
                 </Modal.Footer>
             </Modal>
         );
-    };
-
-    const converDayOfBirth = (s) => {
-        // input: 2005-05-29T00:00:00.000Z
-        const year = s.split("-")[0];
-        const month = s.split("-")[1];
-        const day = s.split("-")[2].split("T")[0];
-        return `${year}-${month}-${day}`;
     };
 
     return (
@@ -409,7 +412,7 @@ function CreateTeamComponent() {
                     {userRegister.playerList.map((player) => (
                         <Row className="text-center">
                             <Col>{player.playerName}</Col>
-                            <Col>{converDayOfBirth(player.dayOfBirth)}</Col>
+                            <Col>{player.dayOfBirth}</Col>
                             <Col>{player.playerType}</Col>
                             <Col>{player.nationality}</Col>
                         </Row>

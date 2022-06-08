@@ -126,7 +126,7 @@ const RegisterListComponent = () => {
                             <Col>{`${player?.playerType}`}</Col>
                             <Col>{`${
                                 currentYear -
-                                parseInt(player?.dayOfBirth.split()[0])
+                                parseInt(player?.dayOfBirth.split("-")[2])
                             }`}</Col>
                         </Row>
                     ))}

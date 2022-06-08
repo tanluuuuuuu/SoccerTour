@@ -10,7 +10,7 @@ const THAMSO = {
 
 const playerSchema = mongoose.Schema({
     playerName: { type: String, require: [true, "Vui lòng nhập tên cầu thủ"] },
-    dayOfBirth: Date,
+    dayOfBirth: String,
     nationality: { type: String, require: [true, "Vui lòng nhập quốc tịch"] },
     playerType: {
         type: String,
@@ -130,8 +130,8 @@ const TourSchema = mongoose.Schema({
             // Lượt đi chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
             {
                 round: Number, // Vòng thi đấu
-                timeBegin: Date,
-                timeEnd: Date,
+                timeBegin: String,
+                timeEnd: String,
                 matches: [{ type: mongoose.Types.ObjectId, ref: "matchModel" }], // Các trận trong vòng thi đấu này
             },
         ],
@@ -139,8 +139,8 @@ const TourSchema = mongoose.Schema({
             // Lượt về chứa danh sách các vòng thi đấu và các trận trong vòng thi đấu đó
             {
                 round: Number, // Vòng thi đấu
-                timeBegin: Date,
-                timeEnd: Date,
+                timeBegin: String,
+                timeEnd: String,
                 matches: [{ type: mongoose.Types.ObjectId, ref: "matchModel" }], // Các trận trong vòng thi đấu này
             },
         ],
@@ -161,8 +161,8 @@ const TourSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    dateStart: Date,
-    dateEnd: Date,
+    dateStart: String,
+    dateEnd: String,
     winPoint: {
         type: Number,
         default: 3,
@@ -189,10 +189,10 @@ const seasonSchema = mongoose.Schema({
         required: true,
     },
     dateStart: {
-        type: Date,
+        type: String,
         required: true,
     },
-    dateEnd: Date,
+    dateEnd: String,
 });
 
 // export const tourModel = mongoose.model("tourModel", tourSchema);

@@ -22,6 +22,18 @@ const helperFunction = {
         else if (a.allGoals.length < b.allGoals.length) return 1;
         else return 0;
     },
+    formatDate: (date) => {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+        return [day, month, year].join('-');
+    }
 };
 
 // Teams
@@ -117,9 +129,26 @@ export const createTeam = async (req, res, next) => {
                 );
         }
 
+        // Convert birthday to form dd/mm/yyyy
+        for (const player of team.playerList)
+        {
+            player.dayOfBirth = helperFunction.formatDate(player.dayOfBirth) 
+        }
+
         // Get player Objects from Team data then save it
         team.userId = user._id;
-        tour.registerList.push(team);
+        let flag = false;
+
+        for (const registrationIndex in tour.registerList) {
+            if (tour.registerList[registrationIndex].userId.equals(user._id)) {
+                tour.registerList[registrationIndex] = team;
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            tour.registerList.push(team);
+        }
         await tour.save();
         console.log("Register sent to tour successfully");
 
@@ -628,9 +657,11 @@ export const updateMatchData = async (req, res) => {
             ) {
                 if (roundMatch.date === match.date) {
                     if (roundMatch.time === match.time) {
-                        return res.status(401).send(
-                            "Tồn tại 2 trận đấu cùng thời điểm của 2 đội"
-                        );
+                        return res
+                            .status(401)
+                            .send(
+                                "Tồn tại 2 trận đấu cùng thời điểm của 2 đội"
+                            );
                     }
                 }
             }
