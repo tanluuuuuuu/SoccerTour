@@ -714,7 +714,7 @@ function CalendarComponent() {
                                                                               .playerList[
                                                                               playerIndex
                                                                           ]
-                                                                              .playerName}
+                                                                              ?.playerName}
                                                                 </option>
                                                                 {selectedMatch[
                                                                     teami
@@ -761,7 +761,7 @@ function CalendarComponent() {
                                                                               .goals[
                                                                               index
                                                                           ]
-                                                                              .type}
+                                                                              ?.type}
                                                                 </option>
                                                                 <option value="OG">
                                                                     OG
@@ -800,7 +800,7 @@ function CalendarComponent() {
                                                                               .playerList[
                                                                               assistIndex
                                                                           ]
-                                                                              .playerName}
+                                                                              ?.playerName}
                                                                 </option>
                                                                 {selectedMatch[
                                                                     teami
