@@ -432,13 +432,13 @@ function HomeTourComponent({ isLoading }) {
                                         />
                                     </Col>
                                     <Col>
-                                        <Form.Label>Country</Form.Label>
+                                        <Form.Label>Quốc tịnh</Form.Label>
                                         <Form.Select
                                             aria-label="Default select example"
                                             onChange={registerFormHandleChange}
                                             name="country"
                                         >
-                                            <option>Select your country</option>
+                                            <option>Chọn quốc tịch</option>
                                             <option value="Việt Nam">
                                                 Việt Nam
                                             </option>
