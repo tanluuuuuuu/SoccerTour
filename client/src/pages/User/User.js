@@ -8,7 +8,7 @@ const UserComponent = () => {
 
     return (
         <Container className="my-5">
-            <h3 className="text-center bg-danger text-white">
+            <h3 className="text-center bg-danger text-white py-2">
                 {user.username}
             </h3>
             <Row className="text-center">

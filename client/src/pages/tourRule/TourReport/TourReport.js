@@ -10,7 +10,7 @@ const TourReport = () => {
     const Ranking = () => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Bảng xếp hạng
                 </h3>
                 <Row className="text-center mx-2">
@@ -58,7 +58,7 @@ const TourReport = () => {
     const RankingPlayer = () => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Bảng xếp hạng cầu thủ
                 </h3>
                 <Row className="text-center mx-2">
@@ -102,7 +102,7 @@ const TourReport = () => {
     const MatchHappen = ({ matchList, wayName }) => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Danh sách trận đấu {wayName}
                 </h3>
                 {matchList?.map((round) =>

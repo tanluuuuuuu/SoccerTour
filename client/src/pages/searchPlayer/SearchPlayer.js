@@ -52,7 +52,7 @@ function SearchPlayerComponent() {
     }
     return (
         <Container className="mt-5">
-            <h3 className="text-center bg-danger text-white">
+            <h3 className="text-center bg-danger text-white py-2">
                 Tra cứu cầu thủ
             </h3>
             <Form className="text-center">

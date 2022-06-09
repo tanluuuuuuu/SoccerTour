@@ -138,7 +138,7 @@ function HomeTourComponent({ isLoading }) {
     const Ranking = () => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Bảng xếp hạng
                     <span
                         style={{
@@ -148,7 +148,7 @@ function HomeTourComponent({ isLoading }) {
                         }}
                     >
                         <i
-                            className="fa-solid fa-rotate"
+                            className="fa-solid fa-rotate mx-2"
                             onClick={() => dispatch(getRanking())}
                         ></i>
                     </span>
@@ -182,7 +182,7 @@ function HomeTourComponent({ isLoading }) {
     const RankingPlayer = () => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Bảng xếp hạng cầu thủ
                     <span
                         style={{
@@ -192,7 +192,7 @@ function HomeTourComponent({ isLoading }) {
                         }}
                     >
                         <i
-                            className="fa-solid fa-rotate"
+                            className="fa-solid fa-rotate mx-2"
                             onClick={() => dispatch(getRankingPlayer())}
                         ></i>
                     </span>
@@ -226,7 +226,7 @@ function HomeTourComponent({ isLoading }) {
     const MatchHappen = () => {
         return (
             <Container className="mt-3">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     Lịch thi đấu
                 </h3>
                 {homeMatches?.map((round) =>
@@ -263,7 +263,7 @@ function HomeTourComponent({ isLoading }) {
     const TourGallery = () => {
         return (
             <Container className="my-5">
-                <h3 className="text-center bg-danger text-white">
+                <h3 className="text-center bg-danger text-white py-2">
                     {tour.tourName}
                 </h3>
                 <Row>
