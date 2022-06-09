@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 import { getRanking, getRankingPlayer } from "../../actions/tour.js";
 import { signin, signup } from "../../actions/user.js";
 import MotionHoc from "../../components/MotionHoc.js";
+import bgImage from "./download.jpg";
 
 const initializeRegisterFormData = {
     phoneNumber: "",
@@ -108,8 +109,12 @@ function HomeTourComponent({ isLoading }) {
                             </Card.Header>
                             <Card.Body>
                                 <Row className="text-center">
-                                    <Col><b>Tên cầu thủ</b></Col>
-                                    <Col><b>Loại cầu thủ</b></Col>
+                                    <Col>
+                                        <b>Tên cầu thủ</b>
+                                    </Col>
+                                    <Col>
+                                        <b>Loại cầu thủ</b>
+                                    </Col>
                                 </Row>
                                 {team?.playerList?.map((player) => {
                                     return (
@@ -285,250 +290,284 @@ function HomeTourComponent({ isLoading }) {
     };
 
     return (
-        <Container>
-            {!user.isLogin ? (
-                <>
-                    <Navbar className="bg-white">
-                        <Container>
-                            <Navbar.Brand>Soccer Tour</Navbar.Brand>
-                            <Nav>
-                                <Button
-                                    className="bg-danger mx-2"
-                                    onClick={() => setShowLoginForm(true)}
-                                >
-                                    Đăng nhập
-                                </Button>
-                                <Button
-                                    className="bg-danger"
-                                    onClick={() => setShowRegisterForm(true)}
-                                >
-                                    Đăng ký
-                                </Button>
-                            </Nav>
-                        </Container>
-                    </Navbar>
-                </>
-            ) : (
-                <></>
-            )}
-            {isLoading ? (
-                <Container className="text-center">
-                    <Spinner animation="grow" />
-                </Container>
-            ) : (
-                <TourGallery />
-            )}
+        <Container
+            style={{
+                backgroundImage: `url(${bgImage})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
+            fluid
+        >
+            <Container>
+                {!user.isLogin ? (
+                    <>
+                        <Navbar className="bg-white">
+                            <Container>
+                                <Navbar.Brand>Soccer Tour</Navbar.Brand>
+                                <Nav>
+                                    <Button
+                                        className="bg-danger mx-2"
+                                        onClick={() => setShowLoginForm(true)}
+                                    >
+                                        Đăng nhập
+                                    </Button>
+                                    <Button
+                                        className="bg-danger"
+                                        onClick={() =>
+                                            setShowRegisterForm(true)
+                                        }
+                                    >
+                                        Đăng ký
+                                    </Button>
+                                </Nav>
+                            </Container>
+                        </Navbar>
+                    </>
+                ) : (
+                    <></>
+                )}
+                {isLoading ? (
+                    <Container className="text-center">
+                        <Spinner animation="grow" />
+                    </Container>
+                ) : (
+                    <TourGallery />
+                )}
 
-            {/* <ModalLogin /> */}
-            <Modal
-                show={showLoginForm}
-                onHide={() => {
-                    loginFormClose();
-                    dispatch({ type: "CLR_ER_MESSAGE", payload: null });
-                }}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Đăng nhập</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {erMessage.length > 0 ? (
-                        <Alert variant="danger">{erMessage}</Alert>
-                    ) : (
-                        <></>
-                    )}
-                    <Form onSubmit={loginFormSubmit}>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Tên đăng nhập</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập username"
-                                    name="userName"
-                                    onChange={loginFormHandleChange}
-                                    value={loginFormData.userName}
-                                    autoFocus
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="my-2">
-                            <Col>
-                                <Form.Label>Mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Nhập mật khẩu"
-                                    name="password"
-                                    onChange={loginFormHandleChange}
-                                    value={loginFormData.password}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="my-2">
-                            <Col className="text-center">
-                                <Button
-                                    variant="danger"
-                                    type="submit"
-                                    className="w-100"
-                                    onClick={loginFormSubmit}
-                                >
-                                    Đăng nhập
-                                </Button>
-                            </Col>
-                        </Row>
-
-                        <Row className="my-4">
-                            <p className="my-1">
-                                <small>Chưa có tài khoản?</small>
-                            </p>
-                            <Col>
-                                <Button
-                                    variant="secondary"
-                                    className="w-100"
-                                    onClick={() => {
-                                        loginFormClose();
-                                        setShowRegisterForm(true);
-                                    }}
-                                >
-                                    Đăng ký
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-
-            {/* <ModalRegister /> */}
-            <Modal
-                show={showRegisterForm}
-                onHide={() => {
-                    setShowRegisterForm(false);
-                    if (isSuccess) {
-                        setIsSuccess(false);
-                    }
-                    dispatch({ type: "CLR_ER_MESSAGE", payload: null });
-                }}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Đăng ký</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {erMessage.length > 0 ? (
-                        <Alert variant="danger">{erMessage}</Alert>
-                    ) : (
-                        <></>
-                    )}
-                    <Form onSubmit={registerFormSubmit}>
-                        {!isSuccess ? (
-                            <>
-                                <Row className="my-2">
-                                    <Col>
-                                        <Form.Label>Số điện thoại</Form.Label>
-                                        <Form.Control
-                                            type="tel"
-                                            placeholder="Nhập số điện thoại"
-                                            name="phoneNumber"
-                                            pattern="[0-9]{10}"
-                                            value={registerFormData.phoneNumber}
-                                            onChange={registerFormHandleChange}
-                                        />
-                                    </Col>
-                                    <Col>
-                                        <Form.Label>Quốc tịnh</Form.Label>
-                                        <Form.Select
-                                            aria-label="Default select example"
-                                            onChange={registerFormHandleChange}
-                                            name="country"
-                                        >
-                                            <option>Chọn quốc tịch</option>
-                                            <option value="Việt Nam">
-                                                Việt Nam
-                                            </option>
-                                            <option value="Other">Other</option>
-                                        </Form.Select>
-                                    </Col>
-                                </Row>
-                                <Row className="my-2">
-                                    <Col>
-                                        <Form.Label>Tên tài khoản</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Nhập tên tài khoản"
-                                            name="userName"
-                                            value={registerFormData.userName}
-                                            onChange={registerFormHandleChange}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row className="my-2">
-                                    <Col>
-                                        <Form.Label>Mật khẩu</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            placeholder="Nhập mật khẩu"
-                                            name="password"
-                                            value={registerFormData.password}
-                                            onChange={registerFormHandleChange}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row className="my-2">
-                                    <Col>
-                                        <Form.Label>
-                                            Xác nhận mật khẩu
-                                        </Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            placeholder="Nhập lại mật khẩu"
-                                            name="reenterPassword"
-                                            value={reenterPassword}
-                                            onChange={(e) =>
-                                                setReenterPassword(
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                    </Col>
-                                </Row>
-                            </>
+                {/* <ModalLogin /> */}
+                <Modal
+                    show={showLoginForm}
+                    onHide={() => {
+                        loginFormClose();
+                        dispatch({ type: "CLR_ER_MESSAGE", payload: null });
+                    }}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Đăng nhập</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {erMessage.length > 0 ? (
+                            <Alert variant="danger">{erMessage}</Alert>
                         ) : (
                             <></>
                         )}
-
-                        <Row className="my-2">
-                            <Col className="text-center">
-                                <Button
-                                    variant={isSuccess ? "primary" : "danger"}
-                                    className="w-100"
-                                    type="submit"
-                                    disabled={isSuccess}
-                                >
-                                    {isSuccess
-                                        ? "Đăng ký thành công"
-                                        : "Xác nhận đăng ký"}
-                                </Button>
-                            </Col>
-                        </Row>
-                        {isSuccess ? (
+                        <Form onSubmit={loginFormSubmit}>
+                            <Row className="my-2">
+                                <Col>
+                                    <Form.Label>Tên đăng nhập</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập username"
+                                        name="userName"
+                                        onChange={loginFormHandleChange}
+                                        value={loginFormData.userName}
+                                        autoFocus
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="my-2">
+                                <Col>
+                                    <Form.Label>Mật khẩu</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Nhập mật khẩu"
+                                        name="password"
+                                        onChange={loginFormHandleChange}
+                                        value={loginFormData.password}
+                                    />
+                                </Col>
+                            </Row>
                             <Row className="my-2">
                                 <Col className="text-center">
                                     <Button
-                                        variant="dark"
+                                        variant="danger"
+                                        type="submit"
                                         className="w-100"
-                                        onClick={() => {
-                                            setShowRegisterForm(false);
-                                            setShowLoginForm(true);
-                                            setIsSuccess(false);
-                                        }}
+                                        onClick={loginFormSubmit}
                                     >
-                                        Đến màn hình đăng nhập
+                                        Đăng nhập
                                     </Button>
                                 </Col>
                             </Row>
+
+                            <Row className="my-4">
+                                <p className="my-1">
+                                    <small>Chưa có tài khoản?</small>
+                                </p>
+                                <Col>
+                                    <Button
+                                        variant="secondary"
+                                        className="w-100"
+                                        onClick={() => {
+                                            loginFormClose();
+                                            setShowRegisterForm(true);
+                                        }}
+                                    >
+                                        Đăng ký
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+
+                {/* <ModalRegister /> */}
+                <Modal
+                    show={showRegisterForm}
+                    onHide={() => {
+                        setShowRegisterForm(false);
+                        if (isSuccess) {
+                            setIsSuccess(false);
+                        }
+                        dispatch({ type: "CLR_ER_MESSAGE", payload: null });
+                    }}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Đăng ký</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {erMessage.length > 0 ? (
+                            <Alert variant="danger">{erMessage}</Alert>
                         ) : (
                             <></>
                         )}
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                        <Form onSubmit={registerFormSubmit}>
+                            {!isSuccess ? (
+                                <>
+                                    <Row className="my-2">
+                                        <Col>
+                                            <Form.Label>
+                                                Số điện thoại
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="tel"
+                                                placeholder="Nhập số điện thoại"
+                                                name="phoneNumber"
+                                                pattern="[0-9]{10}"
+                                                value={
+                                                    registerFormData.phoneNumber
+                                                }
+                                                onChange={
+                                                    registerFormHandleChange
+                                                }
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Form.Label>Quốc tịnh</Form.Label>
+                                            <Form.Select
+                                                aria-label="Default select example"
+                                                onChange={
+                                                    registerFormHandleChange
+                                                }
+                                                name="country"
+                                            >
+                                                <option>Chọn quốc tịch</option>
+                                                <option value="Việt Nam">
+                                                    Việt Nam
+                                                </option>
+                                                <option value="Other">
+                                                    Other
+                                                </option>
+                                            </Form.Select>
+                                        </Col>
+                                    </Row>
+                                    <Row className="my-2">
+                                        <Col>
+                                            <Form.Label>
+                                                Tên tài khoản
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Nhập tên tài khoản"
+                                                name="userName"
+                                                value={
+                                                    registerFormData.userName
+                                                }
+                                                onChange={
+                                                    registerFormHandleChange
+                                                }
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row className="my-2">
+                                        <Col>
+                                            <Form.Label>Mật khẩu</Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Nhập mật khẩu"
+                                                name="password"
+                                                value={
+                                                    registerFormData.password
+                                                }
+                                                onChange={
+                                                    registerFormHandleChange
+                                                }
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row className="my-2">
+                                        <Col>
+                                            <Form.Label>
+                                                Xác nhận mật khẩu
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Nhập lại mật khẩu"
+                                                name="reenterPassword"
+                                                value={reenterPassword}
+                                                onChange={(e) =>
+                                                    setReenterPassword(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </Col>
+                                    </Row>
+                                </>
+                            ) : (
+                                <></>
+                            )}
+
+                            <Row className="my-2">
+                                <Col className="text-center">
+                                    <Button
+                                        variant={
+                                            isSuccess ? "primary" : "danger"
+                                        }
+                                        className="w-100"
+                                        type="submit"
+                                        disabled={isSuccess}
+                                    >
+                                        {isSuccess
+                                            ? "Đăng ký thành công"
+                                            : "Xác nhận đăng ký"}
+                                    </Button>
+                                </Col>
+                            </Row>
+                            {isSuccess ? (
+                                <Row className="my-2">
+                                    <Col className="text-center">
+                                        <Button
+                                            variant="dark"
+                                            className="w-100"
+                                            onClick={() => {
+                                                setShowRegisterForm(false);
+                                                setShowLoginForm(true);
+                                                setIsSuccess(false);
+                                            }}
+                                        >
+                                            Đến màn hình đăng nhập
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            ) : (
+                                <></>
+                            )}
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+            </Container>
         </Container>
     );
 }

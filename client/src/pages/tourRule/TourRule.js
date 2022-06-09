@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     Container,
     Button,
@@ -7,6 +7,7 @@ import {
     Col,
     Spinner,
     Modal,
+    Alert,
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { changeTourRule, endTour } from "../../actions/tour";
@@ -19,6 +20,23 @@ function TourRuleComponent() {
     const [showTourReport, setShowTourReport] = useState(false);
     const [showNewTourModal, setShowNewTourModal] = useState(false);
     const tour = useSelector((state) => state.tour);
+    const erMessage = useSelector((state) => state.erMessage);
+
+    const isInitialMount = useRef(true);
+    const [alertNotification, setAlertNotification] = useState("");
+    const [showAlert, setShowAlert] = useState(false);
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        } else {
+            if (erMessage.length > 0) {
+                setAlertNotification(`${erMessage}`);
+                setShowAlert(true);
+            } else {
+                setShowAlert(false);
+            }
+        }
+    }, [erMessage]);
 
     const initializeTourData = {
         tourName: tour.tourName,
@@ -89,9 +107,20 @@ function TourRuleComponent() {
 
     return (
         <Container className="mt-5">
-            <h3 className="bg-danger text-center text-white">
+            <h3 className="bg-danger text-center text-white py-2">
                 Quy định giải đấu
             </h3>
+            {showAlert ? (
+                <Alert
+                    variant="warning"
+                    dismissible
+                    onClose={() => setShowAlert(false)}
+                >
+                    {alertNotification}
+                </Alert>
+            ) : (
+                <></>
+            )}
             <Form onSubmit={handleSubmit}>
                 <Form.Label>Tên giải đấu</Form.Label>
                 <Form.Control

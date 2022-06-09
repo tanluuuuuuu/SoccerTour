@@ -11,7 +11,7 @@ import {
     CHANGE_TOUR_RULE,
     ACCEPT_REGISTER,
     DELETE_REGISTER,
-    END_TOUR
+    END_TOUR,
 } from "../constants/actionTypes.js";
 
 export const createTeam = (team) => async (dispatch) => {
@@ -81,9 +81,11 @@ export const changeTourRule = (tourData) => async (dispatch) => {
     try {
         const { data } = await api.changeTourRule(tourData);
 
+        dispatch({ type: CLR_ER_MESSAGE, payload: null });
         dispatch({ type: CHANGE_TOUR_RULE, payload: data });
     } catch (error) {
         console.log(error.response.data);
+        dispatch({ type: SET_ER_MESSAGE, payload: error.response.data });
     }
 };
 
@@ -95,7 +97,7 @@ export const acceptRegister = (team) => async (dispatch) => {
     } catch (error) {
         console.log(error.response.data);
     }
-}
+};
 
 export const deleteRegister = (team) => async (dispatch) => {
     try {
@@ -105,7 +107,7 @@ export const deleteRegister = (team) => async (dispatch) => {
     } catch (error) {
         console.log(error.response.data);
     }
-}
+};
 
 export const endTour = () => async (dispatch) => {
     try {
@@ -116,4 +118,4 @@ export const endTour = () => async (dispatch) => {
     } catch (error) {
         dispatch({ type: SET_ER_MESSAGE, payload: error.response.data });
     }
-}
+};

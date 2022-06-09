@@ -924,6 +924,13 @@ export const changeTourRule = async (req, res) => {
         const tour = await TourModel.findOne({ currentTour: true });
         const newTourChange = req.body;
 
+        // Validation
+        if(newTourChange.minTeam > newTourChange.maxTeam
+            || newTourChange.minAge > newTourChange.maxAge
+            || newTourChange.minPlayerOfTeam > newTourChange.maxPlayerOfTeam)
+            return res.status(400).send("Thông số min max không hợp lệ")
+        //-----------------------------------------------------------------
+
         const initializeTourData = {
             tourName: tour.tourName,
             maxTeam: tour.maxTeam,
