@@ -100,7 +100,7 @@ function HomeTourComponent({ isLoading }) {
             <Container className="mt-3 p-0">
                 {allTeams?.map((team) => {
                     return (
-                        <Card className="mt-2">
+                        <Card className="mt-2" style={{ border: "none" }}>
                             <Card.Header
                                 as="h5"
                                 className="bg-danger text-center text-white"
@@ -267,7 +267,7 @@ function HomeTourComponent({ isLoading }) {
 
     const TourGallery = () => {
         return (
-            <Container className="my-5">
+            <Container>
                 <h3 className="text-center bg-danger text-white py-2">
                     {tour.tourName}
                 </h3>
@@ -290,30 +290,29 @@ function HomeTourComponent({ isLoading }) {
     };
 
     return (
-        <Container
-            style={{
-                backgroundImage: `url(${bgImage})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
-            fluid
-        >
+        <Container fluid>
             <Container>
                 {!user.isLogin ? (
                     <>
-                        <Navbar className="bg-white">
+                        <Navbar>
                             <Container>
-                                <Navbar.Brand>Soccer Tour</Navbar.Brand>
+                                <Navbar.Brand
+                                    style={{
+                                        fontSize: "2.0rem",
+                                        lineHeight: "80%",
+                                    }}
+                                >
+                                    Soccer Tour
+                                </Navbar.Brand>
                                 <Nav>
                                     <Button
-                                        className="bg-danger mx-2"
+                                        className="bg-danger mx-2 border-0"
                                         onClick={() => setShowLoginForm(true)}
                                     >
                                         Đăng nhập
                                     </Button>
                                     <Button
-                                        className="bg-danger"
+                                        className="bg-danger mx-2 border-0"
                                         onClick={() =>
                                             setShowRegisterForm(true)
                                         }

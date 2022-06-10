@@ -151,7 +151,12 @@ function CalendarComponent() {
                 );
             }
         }
-        await dispatch(updateMatchResult(selectedMatch._id, temp));
+        //---------------------------------------------------------------------------
+        setSelectedMatch({
+            ...selectedMatch,
+            result: temp
+        });
+        // await dispatch(updateMatchResult(selectedMatch._id, temp));
         setLoading(false);
     };
 
@@ -163,23 +168,17 @@ function CalendarComponent() {
     };
 
     const onChangeGoalTeam1 = (e) => {
-        setSelectedMatchResult({
-            ...selectedMatchResult,
-            team1Result: {
-                ...selectedMatchResult.team1Result,
-                totalGoals: e.target.value,
-            },
-        });
+        const copy = _.cloneDeep(selectedMatchResult);
+        copy.team1Result.totalGoals = e.target.value;
+
+        setSelectedMatchResult({ ...copy });
     };
 
     const onChangeGoalTeam2 = (e) => {
-        setSelectedMatchResult({
-            ...selectedMatchResult,
-            team2Result: {
-                ...selectedMatchResult.team2Result,
-                totalGoals: e.target.value,
-            },
-        });
+        const copy = _.cloneDeep(selectedMatchResult);
+        copy.team2Result.totalGoals = e.target.value;
+
+        setSelectedMatchResult({ ...copy });
     };
 
     const onAddGoalTeam1 = () => {
@@ -296,7 +295,7 @@ function CalendarComponent() {
                 {["awayMatches", "homeMatches"].map((homeOrAway) => (
                     <>
                         {
-                            <h3 className="text-center mt-5 bg-danger text-white">
+                            <h3 className="text-center mt-5 bg-danger text-white py-2">
                                 {homeOrAway === "awayMatches"
                                     ? "Lượt đi"
                                     : "Lượt về"}
@@ -372,7 +371,7 @@ function CalendarComponent() {
                     <Modal.Title>Cập nhật thông tin trận đấu</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                {showAlert ? (
+                    {showAlert ? (
                         <Alert
                             variant="warning"
                             dismissible
@@ -797,7 +796,7 @@ function CalendarComponent() {
                                                                         : selectedMatch[
                                                                               teami
                                                                           ]
-                                                                              .playerList[
+                                                                              ?.playerList[
                                                                               assistIndex
                                                                           ]
                                                                               ?.playerName}
@@ -815,7 +814,7 @@ function CalendarComponent() {
                                                                             }
                                                                         >
                                                                             {
-                                                                                player.playerName
+                                                                                player?.playerName
                                                                             }
                                                                         </option>
                                                                     )

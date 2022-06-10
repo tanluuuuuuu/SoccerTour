@@ -24,16 +24,14 @@ const helperFunction = {
     },
     formatDate: (date) => {
         var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
+            month = "" + (d.getMonth() + 1),
+            day = "" + d.getDate(),
             year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-        return [day, month, year].join('-');
-    }
+
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+        return [day, month, year].join("-");
+    },
 };
 
 // Teams
@@ -76,9 +74,7 @@ export const createTeam = async (req, res, next) => {
 
         // Validate
         if (tour.allTeams.length + 1 > tour.maxTeam)
-            return next(
-                new ErrorResponse("Giải đấu đã đạt số lượng đội tối đa", 500)
-            );
+            return res.status(500).send("Giải đấu đã đạt số lượng đội tối đa");
 
         if (
             !(
@@ -130,9 +126,8 @@ export const createTeam = async (req, res, next) => {
         }
 
         // Convert birthday to form dd/mm/yyyy
-        for (const player of team.playerList)
-        {
-            player.dayOfBirth = helperFunction.formatDate(player.dayOfBirth) 
+        for (const player of team.playerList) {
+            player.dayOfBirth = helperFunction.formatDate(player.dayOfBirth);
         }
 
         // Get player Objects from Team data then save it
@@ -688,20 +683,16 @@ export const updateMatchResult = async (req, res) => {
 
         // Validate
         const tour = await TourModel.findOne({ currentTour: true });
-        const sumTime = parseInt(
-            matchResult.matchLength.minute * 60 + matchResult.matchLength.second
-        );
+        const sumTime = parseInt(matchResult.matchLength.minute * 60) + parseInt(matchResult.matchLength.second) 
         let sumResult1 = 0;
         let sumResult2 = 0;
         for (let teamiResult of ["team1Result", "team2Result"]) {
             for (const goal of matchResult[teamiResult].goals) {
                 if (
-                    parseInt(goal.minute * 60 + goal.second) > sumTime ||
-                    parseInt(goal.minute * 60 + goal.second) < 0
+                    parseInt(goal.minute * 60) + parseInt(goal.second) > sumTime ||
+                    parseInt(goal.minute * 60) + parseInt(goal.second) < 0
                 ) {
                     {
-                        console.log(goal.minute * 60 + goal.second);
-                        console.log(goal.minute * 60 + goal.second > sumTime);
                         console.log("Thời điểm của bàn thắng không hợp lệ");
                         return res
                             .status(500)
@@ -719,6 +710,8 @@ export const updateMatchResult = async (req, res) => {
                 }
             }
         }
+        console.log(sumResult1)
+        console.log(parseInt(matchResult.team1Result.totalGoals))
         if (
             sumResult1 !== parseInt(matchResult.team1Result.totalGoals) ||
             sumResult2 !== parseInt(matchResult.team2Result.totalGoals)
@@ -925,10 +918,12 @@ export const changeTourRule = async (req, res) => {
         const newTourChange = req.body;
 
         // Validation
-        if(newTourChange.minTeam > newTourChange.maxTeam
-            || newTourChange.minAge > newTourChange.maxAge
-            || newTourChange.minPlayerOfTeam > newTourChange.maxPlayerOfTeam)
-            return res.status(400).send("Thông số min max không hợp lệ")
+        if (
+            newTourChange.minTeam > newTourChange.maxTeam ||
+            newTourChange.minAge > newTourChange.maxAge ||
+            newTourChange.minPlayerOfTeam > newTourChange.maxPlayerOfTeam
+        )
+            return res.status(400).send("Thông số min max không hợp lệ");
         //-----------------------------------------------------------------
 
         const initializeTourData = {

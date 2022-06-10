@@ -35,10 +35,6 @@ const UserListComponent = () => {
                     <Card.Header as="h5">{user.role}</Card.Header>
                     <Card.Body>
                         <Card.Title>{user.username}</Card.Title>
-                        <Card.Text>
-                            With supporting text below as a natural lead-in to
-                            additional content.
-                        </Card.Text>
                         {user.team ? (
                             <Button
                                 variant="primary"
