@@ -15,6 +15,13 @@ const helperFunction = {
     compareTeam: (a, b) => {
         if (a.point > b.point) return -1;
         else if (a.point < b.point) return 1;
+        else if (a.point == b.point)
+        {
+            if (a.goalDifference > b.goalDifference)
+                return -1
+            else if (a.goalDifference < b.goalDifference)
+                return 1
+        }
         else return 0;
     },
     comparePlayer: (a, b) => {
@@ -677,20 +684,37 @@ export const updateMatchResult = async (req, res) => {
         const { id: _id } = req.params;
 
         const matchResult = _.cloneDeep(req.body);
+        const oldMatchResult = await matchModel.findOne({ _id: _id }).populate({
+            path: "result",
+            model: "matchResultModel",
+            populate: [
+                {
+                    path: "team1Result.goals",
+                    model: "goalModel",
+                },
+                {
+                    path: "team2Result.goals",
+                    model: "goalModel",
+                },
+            ],
+        });
 
         if (!mongoose.Types.ObjectId.isValid(_id))
             return res.status(403).send("No match with that id");
 
         // Validate
         const tour = await TourModel.findOne({ currentTour: true });
-        const sumTime = parseInt(matchResult.matchLength.minute * 60) + parseInt(matchResult.matchLength.second) 
+        const sumTime =
+            parseInt(matchResult.matchLength.minute) * 60 +
+            parseInt(matchResult.matchLength.second);
         let sumResult1 = 0;
         let sumResult2 = 0;
         for (let teamiResult of ["team1Result", "team2Result"]) {
             for (const goal of matchResult[teamiResult].goals) {
                 if (
-                    parseInt(goal.minute * 60) + parseInt(goal.second) > sumTime ||
-                    parseInt(goal.minute * 60) + parseInt(goal.second) < 0
+                    parseInt(goal.minute) * 60 + parseInt(goal.second) >
+                        sumTime ||
+                    parseInt(goal.minute) * 60 + parseInt(goal.second) < 0
                 ) {
                     {
                         console.log("Thời điểm của bàn thắng không hợp lệ");
@@ -710,8 +734,6 @@ export const updateMatchResult = async (req, res) => {
                 }
             }
         }
-        console.log(sumResult1)
-        console.log(parseInt(matchResult.team1Result.totalGoals))
         if (
             sumResult1 !== parseInt(matchResult.team1Result.totalGoals) ||
             sumResult2 !== parseInt(matchResult.team2Result.totalGoals)
@@ -721,46 +743,68 @@ export const updateMatchResult = async (req, res) => {
                 .status(500)
                 .send("Danh sách bàn thắng và tỉ số không đồng nhất");
         }
+
+        const setList = new Set();
+        for (let teami of ["team1Result", "team2Result"]) {
+            for (const goal of matchResult[teami].goals) {
+                const time = parseInt(goal.minute) * 60 + parseInt(goal.second);
+                setList.add(time);
+            }
+        }
+        if (setList.size != sumResult1 + sumResult2) {
+            return res.status(500).send("Tồn tại hai bàn thắng cùng thời điểm");
+        }
         //.................................................
 
         // Create goal model to have reference
+        // Remove goal and assist in players
+        for (let teami of ["team1Result", "team2Result"]) {
+            for (const goal of oldMatchResult.result[teami].goals) {
+                const player = await playerModel
+                    .findOne({
+                        _id: goal.player,
+                    })
+                    .lean();
+                _.remove(player.allGoals, (goalId) => {
+                    return goalId.equals(goal._id);
+                });
+                await playerModel.findByIdAndUpdate(player._id, player);
+
+                const assistant = await playerModel
+                    .findOne({
+                        _id: goal.assist,
+                    })
+                    .lean();
+
+                _.remove(assistant.allAssists, (goalId) => {
+                    return goalId.equals(goal._id);
+                });
+                await playerModel.findByIdAndUpdate(assistant._id, assistant);
+
+                console.log("Delete goal and assist from player");
+            }
+        }
+        // Create new Goal and add to players
         for (let teami of ["team1Result", "team2Result"]) {
             const goalsAddress = [];
             for (const goal of matchResult[teami].goals) {
-                if (!goal._id) {
-                    const newGoalModel = await goalModel(goal);
-                    await newGoalModel.save();
-                    goalsAddress.push(newGoalModel._id);
+                delete goal["_id"];
+                const newGoalModel = await goalModel(goal);
+                await newGoalModel.save();
+                goalsAddress.push(newGoalModel._id);
 
-                    // save goal an assistant
-                    const player = await playerModel.findOne({
-                        _id: newGoalModel.player,
-                    });
-                    player.allGoals.push(newGoalModel._id);
-                    player.save();
+                // save goal an assistant
+                const player = await playerModel.findOne({
+                    _id: newGoalModel.player,
+                });
+                player.allGoals.push(newGoalModel._id);
+                player.save();
 
-                    const assistant = await playerModel.findOne({
-                        _id: newGoalModel.assist,
-                    });
-                    assistant.allAssists.push(newGoalModel._id);
-                    assistant.save();
-                } else {
-                    await goalModel.findByIdAndUpdate(goal._id, goal, {
-                        new: true,
-                    });
-                    // save goal an assistant
-                    const player = await playerModel.findOne({
-                        _id: goal.player,
-                    });
-                    player.allGoals.push(goal._id);
-                    player.save();
-
-                    const assistant = await playerModel.findOne({
-                        _id: goal.assist,
-                    });
-                    assistant.allAssists.push(goal._id);
-                    assistant.save();
-                }
+                const assistant = await playerModel.findOne({
+                    _id: newGoalModel.assist,
+                });
+                assistant.allAssists.push(newGoalModel._id);
+                assistant.save();
                 console.log("Added goal and assist to player");
             }
             if (goalsAddress.length > 0)
@@ -777,9 +821,115 @@ export const updateMatchResult = async (req, res) => {
         console.log("Update match result successfully");
 
         // Add game win or draw or lose
-        const match = await matchModel.findOne({ _id: _id });
-        const team1 = await teamModel.findOne({ _id: match.team1 });
-        const team2 = await teamModel.findOne({ _id: match.team2 });
+        const match = await matchModel.findOne({ _id: _id }).lean();
+        const team1 = await teamModel.findOne({ _id: match.team1 }).lean();
+        const team2 = await teamModel.findOne({ _id: match.team2 }).lean();
+        const oldoldMatchResult = await matchResultModel.findOne({
+            _id: match.result._id,
+        });
+        // Delete old first
+        for (const gameWinId in team1.gameWin) {
+            if (team1.gameWin[gameWinId].equals(match.result._id)) {
+                team1.point -= parseInt(tour.winPoint);
+                team1.gameWin.splice(gameWinId, 1);
+                console.log("Delete Win");
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+                break;
+            }
+        }
+        for (const gameWinId in team1.gameDraw) {
+            if (team1.gameDraw[gameWinId].equals(match.result._id)) {
+                team1.point -= parseInt(tour.drawPoint);
+                team1.gameDraw.splice(gameWinId, 1);
+                console.log("Delete draw");
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+                break;
+            }
+        }
+        for (const gameWinId in team1.gameLose) {
+            if (team1.gameLose[gameWinId].equals(match.result._id)) {
+                team1.point -= tour.losePoint;
+                team1.gameLose.splice(gameWinId, 1);
+                console.log("Delete lose");
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+                break;
+            }
+        }
+
+        for (const gameWinId in team2.gameWin) {
+            if (team2.gameWin[gameWinId].equals(match.result._id)) {
+                team2.point -= parseInt(tour.winPoint);
+                team2.gameWin.splice(gameWinId, 1);
+                console.log("Delete Win");
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+                break;
+            }
+        }
+        for (const gameWinId in team2.gameDraw) {
+            if (team2.gameDraw[gameWinId].equals(match.result._id)) {
+                team2.point -= parseInt(tour.drawPoint);
+                team2.gameDraw.splice(gameWinId, 1);
+                console.log("Delete draw");
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+                break;
+            }
+        }
+        for (const gameWinId in team2.gameLose) {
+            if (team2.gameLose[gameWinId].equals(match.result._id)) {
+                team2.point -= tour.losePoint;
+                team2.gameLose.splice(gameWinId, 1);
+                console.log("Delete lose");
+
+                team1.goalDifference =
+                    parseInt(team1.goalDifference) -
+                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team2Result.totalGoals);
+                team2.goalDifference =
+                    parseInt(team2.goalDifference) -
+                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
+                    parseInt(oldoldMatchResult.team1Result.totalGoals);
+
+                break;
+            }
+        }
+
+
+
         if (
             parseInt(matchResult.team1Result.totalGoals) >
             parseInt(matchResult.team2Result.totalGoals)
@@ -787,7 +937,7 @@ export const updateMatchResult = async (req, res) => {
             team1.gameWin.push(updatedMatchResult._id);
             team2.gameLose.push(updatedMatchResult._id);
 
-            team1.point += tour.winPoint;
+            team1.point += parseInt(tour.winPoint);
             team2.point += tour.losePoint;
 
             console.log("Team1 win");
@@ -798,7 +948,7 @@ export const updateMatchResult = async (req, res) => {
             team1.gameLose.push(updatedMatchResult._id);
             team2.gameWin.push(updatedMatchResult._id);
 
-            team2.point += tour.winPoint;
+            team2.point += parseInt(tour.winPoint);
             team1.point += tour.losePoint;
 
             console.log("Team2 win");
@@ -806,23 +956,23 @@ export const updateMatchResult = async (req, res) => {
             team1.gameDraw.push(updatedMatchResult._id);
             team2.gameDraw.push(updatedMatchResult._id);
 
-            team1.point += tour.drawPoint;
-            team2.point += tour.drawPoint;
+            team1.point += parseInt(tour.drawPoint);
+            team2.point += parseInt(tour.drawPoint);
 
             console.log("Draw");
         }
 
         team1.goalDifference =
-            team1.goalDifference +
-            matchResult.team1Result.totalGoals -
-            matchResult.team2Result.totalGoals;
+            parseInt(team1.goalDifference) +
+            parseInt(matchResult.team1Result.totalGoals) -
+            parseInt(matchResult.team2Result.totalGoals);
         team2.goalDifference =
-            team2.goalDifference +
-            matchResult.team2Result.totalGoals -
-            matchResult.team1Result.totalGoals;
+            parseInt(team2.goalDifference) +
+            parseInt(matchResult.team2Result.totalGoals) -
+            parseInt(matchResult.team1Result.totalGoals);
 
-        await team1.save();
-        await team2.save();
+        await teamModel.findByIdAndUpdate(team1._id, team1);
+        await teamModel.findByIdAndUpdate(team2._id, team2);
         console.log("Save match win lose successfully");
         //...............................................
 
@@ -919,9 +1069,10 @@ export const changeTourRule = async (req, res) => {
 
         // Validation
         if (
-            newTourChange.minTeam > newTourChange.maxTeam ||
-            newTourChange.minAge > newTourChange.maxAge ||
-            newTourChange.minPlayerOfTeam > newTourChange.maxPlayerOfTeam
+            parseInt(newTourChange.minTeam) > parseInt(newTourChange.maxTeam) ||
+            parseInt(newTourChange.minAge) > parseInt(newTourChange.maxAge) ||
+            parseInt(newTourChange.minPlayerOfTeam) >
+                parseInt(newTourChange.maxPlayerOfTeam)
         )
             return res.status(400).send("Thông số min max không hợp lệ");
         //-----------------------------------------------------------------

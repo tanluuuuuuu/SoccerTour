@@ -152,11 +152,9 @@ function CalendarComponent() {
             }
         }
         //---------------------------------------------------------------------------
-        setSelectedMatch({
-            ...selectedMatch,
-            result: temp
-        });
-        // await dispatch(updateMatchResult(selectedMatch._id, temp));
+
+        await dispatch(updateMatchResult(selectedMatch._id, temp));
+
         setLoading(false);
     };
 
@@ -647,22 +645,22 @@ function CalendarComponent() {
                                                     playerIndex =
                                                         selectedMatchResult[
                                                             team
-                                                        ].goals[index].player;
+                                                        ]?.goals[index]?.player;
                                                 let assistIndex = selectedMatch[
                                                     teami
-                                                ].playerList.findIndex(
+                                                ]?.playerList?.findIndex(
                                                     (player) =>
                                                         player._id ===
                                                         selectedMatchResult[
                                                             team
-                                                        ].goals[index].assist
-                                                            ._id
+                                                        ]?.goals[index]?.assist
+                                                            ?._id
                                                 );
                                                 if (assistIndex === -1)
                                                     assistIndex =
                                                         selectedMatchResult[
                                                             team
-                                                        ].goals[index].assist;
+                                                        ]?.goals[index]?.assist;
                                                 return (
                                                     <Row
                                                         className="pt-2 text-left"
