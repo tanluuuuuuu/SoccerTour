@@ -15,14 +15,10 @@ const helperFunction = {
     compareTeam: (a, b) => {
         if (a.point > b.point) return -1;
         else if (a.point < b.point) return 1;
-        else if (a.point == b.point)
-        {
-            if (a.goalDifference > b.goalDifference)
-                return -1
-            else if (a.goalDifference < b.goalDifference)
-                return 1
-        }
-        else return 0;
+        else if (a.point == b.point) {
+            if (a.goalDifference > b.goalDifference) return -1;
+            else if (a.goalDifference < b.goalDifference) return 1;
+        } else return 0;
     },
     comparePlayer: (a, b) => {
         if (a.allGoals.length > b.allGoals.length) return -1;
@@ -811,15 +807,6 @@ export const updateMatchResult = async (req, res) => {
                 _.update(matchResult, `${teami}.goals`, () => goalsAddress);
         }
 
-        const updatedMatchResult = await matchResultModel.findByIdAndUpdate(
-            matchResult._id,
-            matchResult,
-            {
-                new: true,
-            }
-        );
-        console.log("Update match result successfully");
-
         // Add game win or draw or lose
         const match = await matchModel.findOne({ _id: _id }).lean();
         const team1 = await teamModel.findOne({ _id: match.team1 }).lean();
@@ -837,10 +824,6 @@ export const updateMatchResult = async (req, res) => {
                     parseInt(team1.goalDifference) -
                     parseInt(oldoldMatchResult.team1Result.totalGoals) +
                     parseInt(oldoldMatchResult.team2Result.totalGoals);
-                team2.goalDifference =
-                    parseInt(team2.goalDifference) -
-                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team1Result.totalGoals);
                 break;
             }
         }
@@ -853,10 +836,6 @@ export const updateMatchResult = async (req, res) => {
                     parseInt(team1.goalDifference) -
                     parseInt(oldoldMatchResult.team1Result.totalGoals) +
                     parseInt(oldoldMatchResult.team2Result.totalGoals);
-                team2.goalDifference =
-                    parseInt(team2.goalDifference) -
-                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team1Result.totalGoals);
                 break;
             }
         }
@@ -869,23 +848,19 @@ export const updateMatchResult = async (req, res) => {
                     parseInt(team1.goalDifference) -
                     parseInt(oldoldMatchResult.team1Result.totalGoals) +
                     parseInt(oldoldMatchResult.team2Result.totalGoals);
-                team2.goalDifference =
-                    parseInt(team2.goalDifference) -
-                    parseInt(oldoldMatchResult.team2Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team1Result.totalGoals);
                 break;
             }
         }
+
+        console.log(oldoldMatchResult.team1Result.totalGoals);
+        console.log(oldoldMatchResult.team2Result.totalGoals);
+        console.log(team1.goalDifference);
 
         for (const gameWinId in team2.gameWin) {
             if (team2.gameWin[gameWinId].equals(match.result._id)) {
                 team2.point -= parseInt(tour.winPoint);
                 team2.gameWin.splice(gameWinId, 1);
                 console.log("Delete Win");
-                team1.goalDifference =
-                    parseInt(team1.goalDifference) -
-                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team2Result.totalGoals);
                 team2.goalDifference =
                     parseInt(team2.goalDifference) -
                     parseInt(oldoldMatchResult.team2Result.totalGoals) +
@@ -898,10 +873,6 @@ export const updateMatchResult = async (req, res) => {
                 team2.point -= parseInt(tour.drawPoint);
                 team2.gameDraw.splice(gameWinId, 1);
                 console.log("Delete draw");
-                team1.goalDifference =
-                    parseInt(team1.goalDifference) -
-                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team2Result.totalGoals);
                 team2.goalDifference =
                     parseInt(team2.goalDifference) -
                     parseInt(oldoldMatchResult.team2Result.totalGoals) +
@@ -915,10 +886,6 @@ export const updateMatchResult = async (req, res) => {
                 team2.gameLose.splice(gameWinId, 1);
                 console.log("Delete lose");
 
-                team1.goalDifference =
-                    parseInt(team1.goalDifference) -
-                    parseInt(oldoldMatchResult.team1Result.totalGoals) +
-                    parseInt(oldoldMatchResult.team2Result.totalGoals);
                 team2.goalDifference =
                     parseInt(team2.goalDifference) -
                     parseInt(oldoldMatchResult.team2Result.totalGoals) +
@@ -928,7 +895,14 @@ export const updateMatchResult = async (req, res) => {
             }
         }
 
-
+        const updatedMatchResult = await matchResultModel.findByIdAndUpdate(
+            matchResult._id,
+            matchResult,
+            {
+                new: true,
+            }
+        );
+        console.log("Update match result successfully");
 
         if (
             parseInt(matchResult.team1Result.totalGoals) >
@@ -970,6 +944,10 @@ export const updateMatchResult = async (req, res) => {
             parseInt(team2.goalDifference) +
             parseInt(matchResult.team2Result.totalGoals) -
             parseInt(matchResult.team1Result.totalGoals);
+
+        console.log(oldoldMatchResult.team1Result.totalGoals);
+        console.log(oldoldMatchResult.team2Result.totalGoals);
+        console.log(team1.goalDifference);
 
         await teamModel.findByIdAndUpdate(team1._id, team1);
         await teamModel.findByIdAndUpdate(team2._id, team2);
